@@ -9,15 +9,17 @@
           <img src="../assets/logo.png" height="50" width="auto" />
         </b-navbar-brand>
         <b-collapse is-nav id="nav_collapse">
-          <b-navbar-nav>
+          <router-link to="/Product" >Product </router-link>
+          <!-- <b-navbar-nav>
             <b-nav-item href="#">Home</b-nav-item>
-            <b-nav-item href="#">Product</b-nav-item>
+            
             <b-nav-item href="#">Showcase</b-nav-item>
             <b-nav-item href="#">About Us</b-nav-item>
-          </b-navbar-nav>
+          </b-navbar-nav> -->
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
             <!-- {{this.$session.getAll()}} -->
+            
                 <b-button v-if="this.$session.get('session')== true" @click="cSignout()" class="yr-button">Sign Out</b-button>
                 <router-link to="/Signin" v-else><b-button class="yr-button">Sign in</b-button></router-link>
           </b-navbar-nav>

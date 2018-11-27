@@ -5,6 +5,8 @@ import Home from '@/components/Home'
 import HomeContent from '@/components/HomeContent'
 import Signin from '@/components/Signin'
 import Register from '@/components/Register'
+import Product from '@/components/Product'
+import Create from '@/components/Create'
 
 Vue.use(Router)
 const NotFound = { template: '<p>Page not found</p>' }
@@ -29,7 +31,18 @@ export default new Router({
       path: '/Register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/Product',
+      name: 'Product',
+      component: Product
+    },
+    {
+      path: '/Create',
+      name: 'Create',
+      component: Create
     }
+    
   ]
 })
 // const routes = routerOptions.map(route => {
