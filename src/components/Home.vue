@@ -17,14 +17,9 @@
           </b-navbar-nav>
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
-            <b-nav-item-dropdown left>
-              <!-- Using button-content slot -->
-              <template slot="button-content">
-                <em>Login</em>
-              </template>
-              <b-dropdown-item href="#">Profile</b-dropdown-item>
-              <b-dropdown-item href="#">Signout</b-dropdown-item>
-            </b-nav-item-dropdown>
+            <!-- {{this.$session.getAll()}} -->
+                <b-button v-if="this.$session.get('session')== true" @click="cSignout()" class="yr-button">Sign Out</b-button>
+                <router-link to="/Signin" v-else><b-button class="yr-button">Sign in</b-button></router-link>
           </b-navbar-nav>
         </b-collapse>
       </b-container>
@@ -165,7 +160,7 @@
             <a href=""><i class="fab fa-facebook" style="margin:0px 10px"></i></a>
             <a href=""><i class="fab fa-twitter" style="margin:0px 10px"></i></a></p>
             <br>
-            <b-form-input v-model="text1" type="text" placeholder="E-mail" class="email left"></b-form-input>
+            <b-form-input v-model="mailContact" type="text" placeholder="E-mail" class="email left"></b-form-input>
             <b-button class="yr-button">ส่ง</b-button>
           </b-col>
         </b-row>
@@ -175,12 +170,15 @@
 
 </template>
 <script>
-  /* eslint-disable */
+/* eslint-disable */
 import HomeContent from '@/components/HomeContent'
+// import {userChack} from '@/components/Signin'
   export default {
     name: 'Home',
+    // props:['userChack'],
     data() {
       return {
+        mailContact: '',
         items: [{
             numFlow: '1',
             iconFlow: require('../assets/flowicon/icon1.png'),
@@ -283,6 +281,14 @@ import HomeContent from '@/components/HomeContent'
         ]
 
       }
+    },
+    methods:{
+      cSignout(){
+        console.log(this.$session.getAll())
+        this.$session.clear()
+        this.$session.destroy()
+        
+      }
     }
 
   }
@@ -332,4 +338,7 @@ import HomeContent from '@/components/HomeContent'
     margin-right: 10px
   }
 
+  .navbar-nav .nav-link:hover{
+    color: #007bff !important
+  }
 </style>

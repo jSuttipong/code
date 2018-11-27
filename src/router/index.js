@@ -3,6 +3,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import HomeContent from '@/components/HomeContent'
+import Signin from '@/components/Signin'
+import Register from '@/components/Register'
 
 Vue.use(Router)
 const NotFound = { template: '<p>Page not found</p>' }
@@ -17,6 +19,16 @@ export default new Router({
       path: '/Home',
       name: 'HomeContent',
       component: HomeContent
+    },
+    {
+      path: '/Signin',
+      name: 'Signin',
+      component: Signin
+    },
+    {
+      path: '/Register',
+      name: 'Register',
+      component: Register
     }
   ]
 })

@@ -100,7 +100,7 @@
     </div>
 </template>
 <script>
-  /* eslint-disable */
+/* eslint-disable */
 // import Home from '@/components/Home'
   export default {
     

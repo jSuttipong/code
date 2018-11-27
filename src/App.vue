@@ -1,14 +1,13 @@
 <template>
   <div>
+    
     <router-view/>
-    <HomeContent/>
+    
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import HomeContent from '@/components/HomeContent'
-
 export default {
   name: 'App',
 }
