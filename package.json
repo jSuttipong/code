@@ -20,6 +20,7 @@
     "firebase": "^5.5.6",
     "moment": "^2.22.2",
     "vue": "^2.5.2",
+    "vue-free-transform": "^1.0.11",
     "vue-router": "^3.0.2",
     "vue-session": "^1.0.0"
   },

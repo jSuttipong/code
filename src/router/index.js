@@ -7,6 +7,8 @@ import Signin from '@/components/Signin'
 import Register from '@/components/Register'
 import Product from '@/components/Product'
 import Create from '@/components/Create'
+import Payment from '@/components/Payment'
+import Layout from '@/components/Layout'
 
 Vue.use(Router)
 const NotFound = { template: '<p>Page not found</p>' }
@@ -41,6 +43,16 @@ export default new Router({
       path: '/Create',
       name: 'Create',
       component: Create
+    },
+    {
+      path: '/Payment',
+      name: 'Payment',
+      component: Payment
+    },
+    {
+      path: '/Layout',
+      name: 'Layout',
+      component: Layout
     }
     
   ]

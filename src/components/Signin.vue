@@ -1,6 +1,6 @@
 <template>
-  <div class="signin">
-    <div class="helper">
+  <div class="signin" style="position:relative; margin: 209px 0">
+    <div class="helper " >
       <b-card text-variant="black" header="Sign in" class="text-center signin-group">
         <b-form-input v-model="username" type="text" placeholder="Username" class="signin-input"></b-form-input>
         <b-form-input v-model="password" type="password" placeholder="Password" class="signin-input"></b-form-input>

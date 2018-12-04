@@ -7,8 +7,10 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 // import HomeContent from '@/component/HomeContent.vue'
 import VueSession from 'vue-session'
-Vue.use(VueSession)
+import FreeTransform from 'vue-free-transform'
 
+Vue.use(VueSession)
+Vue.use(FreeTransform)
 // CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

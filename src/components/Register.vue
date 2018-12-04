@@ -1,5 +1,5 @@
 <template>
-    <div class="signin">
+    <div class="signin" style="position:relative;margin: 93px 0">
     <div class="helper">
       <b-card text-variant="black" header="Sign in" class="text-center signin-group">
         <b-form-input v-model="email" type="text" placeholder="อีเมล์" class="signin-input"></b-form-input>
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+/* eslint-disable */
+
 const axios = require('axios');
 
     export default {
