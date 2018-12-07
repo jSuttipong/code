@@ -4,17 +4,14 @@
     <h1 class="mt-5 mb-5">เลือกสินค้าของคุณ</h1>
     <div v-for=" product in productList" :key="product" style="height:200px;width:300px" class="left mr-5">
         <div class="">
-          <router-link :to="product.pLink" ><img :src="product.pImg" style="width:300px; height:200px;position:relative;" class="mb-5 product-select item">
-            <div class="overlay">
-              <div class="text">Hello World</div>
-            </div>
+          <router-link :to="product.pLink" ><img :src="product.pImg" style="width:300px; height:200px;position:relative;" class="mb-5 product-select item" v-b-tooltip.hover :title="product.pName">
           </router-link>
         </div>
     </div>
     </b-container>
     <div style="height:519px"></div>
     </div>
-</template>
+</template>=
 
 <script>
 /* eslint-disable */
@@ -27,7 +24,7 @@ export default {
           {
             pName: 'Card',
             pImg: require('../assets/product/card.png'),
-            pLink: '/Layout'
+            pLink: '/Create'
           },
           // {
           //   pName: 'NolmalPhoto',
@@ -36,8 +33,8 @@ export default {
           // },
           {
             pName: 'Premium',
-            pImg: require('../assets/product/premium.png'),
-            pLink: '/'
+            pImg: require('../assets/product/premium.jpeg'),
+            pLink: ''
           },]
     }
   }

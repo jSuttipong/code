@@ -24,15 +24,7 @@
                 <div>
                 <!-- Modal Component -->
                 <b-modal id="checkSignOut" ref="modalSignOut" hide-footer title="Sign Out" >
-                  <p class="my-4">คุณต้องการออกจากระบบหรือไม่</p>
-                  <div class="vld-parent">
-        <loading :active.sync="isLoading"
-        :can-cancel="false"
-        loader='dots'
-        color= '#106FFF'
-        backgroundColor= '#ffffff'
-        :is-full-page="true"></loading>
-    </div>
+                  <p class="my-4 cred">คุณต้องการออกจากระบบหรือไม่</p>
                   <b-button @click="cSignout()" class="yr-button">ตกลง</b-button>
                   <b-button class="yr-button mr-3" style="background-color:#999; border:none">ยกเลิก</b-button>
                 </b-modal>
@@ -43,7 +35,14 @@
     </b-navbar>
     <!-- navbar -->
     <div style="height:76px; width:100%"></div>
-
+    <div class="vld-parent">
+                    <loading :active.sync="isLoading"
+                    :can-cancel="false"
+                    loader='dots'
+                    color= '#106FFF'
+                    backgroundColor= '#ffffff'
+                    :is-full-page="true"></loading>
+    </div>
     <router-view/>
     <div class="footer fontth cwhite" style="bottom:0; position:relative; padding-top:1px">
       <b-container >
@@ -81,7 +80,6 @@
 <script>
 /* eslint-disable */
 import Loading from 'vue-loading-overlay';
-
 export default {
   components: {
     Loading
@@ -102,7 +100,7 @@ export default {
             name: 'เกี่ยวกับเรา'
           },
         ],
-         mailContact: '',
+        mailContact: '',
         isLoading: false,
     }
   },
@@ -114,9 +112,10 @@ export default {
         this.$session.destroy()
         this.$forceUpdate();
         this.hideModal()
+        this.$router.push( {name:'Home'})
         setTimeout(() => {
           this.isLoading = false
-        },300) 
+        },700) 
       },
       hideModal () {
       this.$refs.modalSignOut.hide()

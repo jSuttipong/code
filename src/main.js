@@ -9,11 +9,13 @@ import BootstrapVue from 'bootstrap-vue'
 import VueSession from 'vue-session'
 import FreeTransform from 'vue-free-transform'
 import { VueSpinners } from '@saeris/vue-spinners'
+import VueGoodTablePlugin from 'vue-good-table';
 
 
 Vue.use(VueSession)
 Vue.use(FreeTransform)
 Vue.use(VueSpinners)
+Vue.use(VueGoodTablePlugin);
 // CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

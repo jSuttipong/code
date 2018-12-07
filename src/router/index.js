@@ -45,7 +45,7 @@ export default new Router({
       component: Product
     },
     {
-      path: '/Create:Layouts',
+      path: '/Create',
       name: 'Create',
       component: Create,
       props: true
@@ -62,7 +62,7 @@ export default new Router({
       props: true
     },
     {
-      path: '/ChackOrder',
+      path: '/ChackOrder:imgData',
       name: 'ChackOrder',
       component: ChackOrder,
       props: true

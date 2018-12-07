@@ -124,7 +124,6 @@ const axios = require('axios');
               // Vue.$http.headers.common['Authorization'] = User_email + result.body
               // console.log(result)
               this.$router.push( {name:'Home',params: { userSignin: true}})
-              // console.log('12312341231554'+this.$session.get('session')+'12312312312123')
               console.log(this.$session.getAll())
             this.isLoading = false
               // this.isLoading = false;

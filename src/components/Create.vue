@@ -6,15 +6,17 @@
     <div class="item-bar">
       <b-container>
         <div class="upload-btn-wrapper" v-if="!image">
+          <form action="">
           <b-button class="yr-button cwhite bt-h mt-3">Upload Marker</b-button>
-          <input type="file" @change="onFileChange" name="myfile" />
+          <input type="file" @change="onFileChange" id="files" name="files" />
+          </form>
         </div>
 
         <div v-else class="upload-btn-wrapper left">
-          <b-button class="yr-button cwhite bt-h mt-3" @click="removeImage">Remove Marker</b-button>
+          <b-button class="yr-button cwhite bt-h mt-3" @click="removeImage" style="background-color:#e53167;border:none">Remove Marker</b-button>
         </div>
-        <div class="left ml-3 mt-3" v-if="chackUpload&&Layouts.lName=='Layout1'">
-          <b-button class="cwhite add-button" style="margin-top:0"  @click="addButton()">Upload Video
+        <div class="left ml-3 mt-3" v-if="image">
+          <b-button class="cwhite add-button" style="margin-top:0;background-color:#707070 !important;border:none"  @click="addButton()">Upload Video
     </b-button>
     <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBL()">Location
     </b-button>
@@ -22,24 +24,19 @@
     </b-button>
     <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBC()">Contact
     </b-button>
-    <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBF()">Free Button
-    </b-button>
-
     <b-button class="cwhite add-button" style="margin-top:0"  @click="reset()">Reset
     </b-button>
-        <!-- <div  class="right ml-3 mt-2 cwhite">
-        <b-form-checkbox-group id="checkboxes2" name="flavour2" v-model="arBtSelect">
-        <b-form-checkbox value="location" @click="chackARBL()">Location</b-form-checkbox>
-        <b-form-checkbox value="gallery">Gallery</b-form-checkbox>
-        <b-form-checkbox value="contact">Contact</b-form-checkbox>
-        <b-form-checkbox value="freebutton">Free Button</b-form-checkbox>
-      </b-form-checkbox-group>
-</div> -->
         </div>
-    <b-button class="cwhite add-button mt-3 right" style="margin-top:-30px" @click="success()">เสร็จสิ้น</b-button>
       </b-container>
     </div>
-
+    <div class="vld-parent">
+        <loading :active.sync="isLoading"
+        :can-cancel="false"
+        loader='dots'
+        color= '#106FFF'
+        backgroundColor= '#ffffff'
+        :is-full-page="true"></loading>
+        </div>
     <div class="workspace" ref="workspace">
       <div v-for="element in elements" :key="element.id">
         <!-- <b-button class="yr-button cwhite" @click="close()">X</b-button> -->
@@ -52,14 +49,19 @@
           </div>
         </FreeTransform>
       </div>
-      <img :src="image" width="700" height="auto">
+      <img :src="image" width="700" height="auto" >
+      <!-- <video width="400" controls>
+  <source :src="videoData.name" type="video/mp4">
+</video> -->
     </div>
+    {{imageType}}
     <b-container>
     <b-form-textarea id="textarea2"
                    v-model.trim="text"
                    placeholder="ข้อความเพิ่มเติม"
                    :rows="3"
                    class="mb-5 mt-5"></b-form-textarea>
+      <b-button class="cwhite add-button mb-2 right" style="margin-top:-40px" @click="success()">เสร็จสิ้น</b-button>
     </b-container>
   </div>
 
@@ -67,14 +69,15 @@
 
 <script>
 /* eslint-disable */
-
-  import FreeTransform from 'vue-free-transform'
-
+import Loading from 'vue-loading-overlay';
+import FreeTransform from 'vue-free-transform'
+const axios = require('axios');
   export default {
     props: ["Layouts"],
     name: 'app',
     components: {
-      FreeTransform
+      FreeTransform,
+      Loading
     },
     data() {
       return {
@@ -84,86 +87,14 @@
         bContact: true,
         bFfreebtn: true,
         elements: [
-          // {
-          //   id: "el-",
-          // x: 140,
-          // y: 230,
-          // scaleX: 1,
-          // scaleY: 1,
-          // width: 420,
-          // height: 315,
-          // angle: 0,
-          // classPrefix: "tr",
-          // disableScale: true,
-          // styles: {
-          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
-          // }
-          // },
-          // {
-          //   id: "el-2",
-          // x: 0,
-          // y: 30,
-          // scaleX: 1,
-          // scaleY: 1,
-          // width: 300,
-          // height: 100,
-          // angle: 0,
-          // classPrefix: "tr",
-          // disableScale: true,
-          // styles: {
-          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
-          // }
-          // },
-          // {
-          //   id: "el-3",
-          // x: 400,
-          // y: 90,
-          // scaleX: 1,
-          // scaleY: 1,
-          // width: 300,
-          // height: 100,
-          // angle: 0,
-          // classPrefix: "tr",
-          // disableScale: true,
-          // styles: {
-          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
-          // }
-          // },
-          // {
-          //   id: "el-4",
-          // x: 0,
-          // y: 590,
-          // scaleX: 1,
-          // scaleY: 1,
-          // width: 300,
-          // height: 100,
-          // angle: 0,
-          // classPrefix: "tr",
-          // disableScale: true,
-          // styles: {
-          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
-          // }
-          // },
-          // {
-          //   id: "el-5",
-          // x: 400,
-          // y: 650,
-          // scaleX: 1,
-          // scaleY: 1,
-          // width: 300,
-          // height: 100,
-          // angle: 0,
-          // classPrefix: "tr",
-          // disableScale: true,
-          // styles: {
-          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
-          // }
-          // }
         ],
         inputMarker: [],
         offsetX: 0,
         offsetY: 0,
         image: '',
+        imageType: '',
+        videoData:'',
+        isLoading: false,
         chackUpload: false,
         text: '',
         arBtSelect:[],
@@ -240,28 +171,38 @@
 
       },
       onFileChange(e) {
-        console.log(e.naturalWidth)
-        var files = e.target.files || e.dataTransfer.files;
+        this.isLoading = true
+        // console.log(e)
+        var files = e.target.files ;
+        this.videoData = files;
+        console.log(this.videoData)
         if (!files.length)
           return;
 
         this.createImage(files[0]);
-
+        
 
       },
       createImage(file) {
+        
         var image = new Image();
         var reader = new FileReader();
         var vm = this;
-
+        
         reader.onload = (e) => {
           vm.image = e.target.result;
-          console.log(vm.image.naturalWidth)
+          // vm.imageType = e;
+          // console.log(vm.image.naturalWidth)
         };
         reader.readAsDataURL(file);
-        var S = document.getElementById(file);
+        this.imageType = document.getElementById('markerFile');
         this.chackUpload = true
+        this.videoData = this.image;
         // console.log(vm.image.width  )
+             setTimeout(() => {
+            this.isLoading = false
+      },2000)
+        console.log('---------------------')
       },
       removeImage: function (e) {
         this.image = '';
@@ -269,7 +210,39 @@
         // this.$forceUpdate();
       },
       success(){
-        this.$router.push({name:'ChackOrder',params:{dataChack: this.elements, dataChack2:this.inputMarker} })
+        // this.$router.push({name:'ChackOrder',params:{dataChack: this.elements, dataChack2:this.inputMarker} })
+        // var filess = document.getElementById('files');
+        this.isLoading = true;
+        var querystring = require('querystring');
+
+        var chackEP = querystring.stringify({
+          chk_data: this.videoData,
+        });
+        const config = {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+        
+        axios.post('http://fishyutt.xyz/api/youry/uploads.php', chackEP, config)
+          .then((result) => {
+              console.log(result)
+              console.log('sccess')
+              // this.$router.push( {name:'Home'})
+              this.isLoading = false
+              // this.$router.push('http://fishyutt.xyz/api/youry/uploads.php' )
+              // window.open('http://fishyutt.xyz/api/youry/uploads.php', '_blank');
+              
+              // window.open("http://fishyutt.xyz/api/youry/uploads.php");
+          })
+          .catch((error) => {
+            // Do somthing
+            this.isLoading = false
+            console.log(error.response)
+          })
+        // document.getElementById('input').files[0]
+        // console.log('---------------------'+e)
+        // this.$router.push( {name:'ChackOrder',params: { imgData: this.image,imageType:myFile}})
       },
       chackARBL(){
         if(this.bLocation == true){
@@ -338,28 +311,6 @@
           this.bGallery = true
         }
       },
-      chackARBF(){
-        if(this.bGallery == true){
-          this.bGallery = false
-          this.elements.push({
-           id: "el-5",
-          x: 400,
-          y: 650,
-          scaleX: 1,
-          scaleY: 1,
-          width: 300,
-          height: 100,
-          angle: 0,
-          classPrefix: "tr",
-          disableScale: true,
-          styles: {
-            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
-          }
-        })
-        }else{
-          this.bGallery = true
-        }
-      },
       reset(){
         this.elements = []
       }
@@ -376,6 +327,7 @@
 
   .wrapper {
     flex: 1;
+    min-height: 680px
   }
 
   .workspace {
