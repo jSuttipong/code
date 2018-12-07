@@ -14,6 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@saeris/vue-spinners": "^1.0.8",
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.11",
     "express": "^4.16.4",
@@ -21,6 +22,7 @@
     "moment": "^2.22.2",
     "vue": "^2.5.2",
     "vue-free-transform": "^1.0.11",
+    "vue-loading-overlay": "^3.1.0",
     "vue-router": "^3.0.2",
     "vue-session": "^1.0.0"
   },

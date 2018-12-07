@@ -18,14 +18,32 @@
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
             <!-- {{this.$session.getAll()}} -->
-                <b-button v-if="this.$session.get('session')== true" @click="cSignout()" class="yr-button">Sign Out</b-button>
+                <router-link to="/Order"><b-button v-if="this.$session.get('session')== true" class="yr-button mr-2 bt-order">Order</b-button></router-link>
+                <b-button v-if="this.$session.get('session')== true"  v-b-modal.checkSignOut class="yr-button">Sign Out</b-button>
                 <router-link to="/Signin" v-else><b-button class="yr-button">Sign in</b-button></router-link>
+                <div>
+                <!-- Modal Component -->
+                <b-modal id="checkSignOut" ref="modalSignOut" hide-footer title="Sign Out" >
+                  <p class="my-4">คุณต้องการออกจากระบบหรือไม่</p>
+                  <div class="vld-parent">
+        <loading :active.sync="isLoading"
+        :can-cancel="false"
+        loader='dots'
+        color= '#106FFF'
+        backgroundColor= '#ffffff'
+        :is-full-page="true"></loading>
+    </div>
+                  <b-button @click="cSignout()" class="yr-button">ตกลง</b-button>
+                  <b-button class="yr-button mr-3" style="background-color:#999; border:none">ยกเลิก</b-button>
+                </b-modal>
+              </div>
           </b-navbar-nav>
         </b-collapse>
       </b-container>
     </b-navbar>
     <!-- navbar -->
     <div style="height:76px; width:100%"></div>
+
     <router-view/>
     <div class="footer fontth cwhite" style="bottom:0; position:relative; padding-top:1px">
       <b-container >
@@ -62,7 +80,12 @@
 
 <script>
 /* eslint-disable */
+import Loading from 'vue-loading-overlay';
+
 export default {
+  components: {
+    Loading
+  },
   name: 'App',
   data(){
     return {
@@ -79,18 +102,28 @@ export default {
             name: 'เกี่ยวกับเรา'
           },
         ],
-                mailContact: '',
-
+         mailContact: '',
+        isLoading: false,
     }
   },
   methods:{
       cSignout(){
+        this.isLoading = true
         console.log(this.$session.getAll())
         this.$session.clear()
         this.$session.destroy()
         this.$forceUpdate();
-      }
-    }
+        this.hideModal()
+        setTimeout(() => {
+          this.isLoading = false
+        },300) 
+      },
+      hideModal () {
+      this.$refs.modalSignOut.hide()
+      
+
+    },
+    },
 }
 </script>
 
@@ -103,5 +136,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.bt-order{
+  background-color: #777 !important;
+  border: none
 }
 </style>

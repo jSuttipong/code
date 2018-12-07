@@ -9,6 +9,9 @@ import Product from '@/components/Product'
 import Create from '@/components/Create'
 import Payment from '@/components/Payment'
 import Layout from '@/components/Layout'
+import ChackOrder from '@/components/ChackOrder'
+import Order from '@/components/Order'
+
 
 Vue.use(Router)
 const NotFound = { template: '<p>Page not found</p>' }
@@ -17,7 +20,8 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      props: true
     },
     {
       path: '/Home',
@@ -27,7 +31,8 @@ export default new Router({
     {
       path: '/Signin',
       name: 'Signin',
-      component: Signin
+      component: Signin,
+      props: true
     },
     {
       path: '/Register',
@@ -40,9 +45,10 @@ export default new Router({
       component: Product
     },
     {
-      path: '/Create',
+      path: '/Create:Layouts',
       name: 'Create',
-      component: Create
+      component: Create,
+      props: true
     },
     {
       path: '/Payment',
@@ -52,7 +58,20 @@ export default new Router({
     {
       path: '/Layout',
       name: 'Layout',
-      component: Layout
+      component: Layout,
+      props: true
+    },
+    {
+      path: '/ChackOrder',
+      name: 'ChackOrder',
+      component: ChackOrder,
+      props: true
+    },
+    {
+      path: '/Order',
+      name: 'Order',
+      component: Order,
+      props: true
     }
     
   ]

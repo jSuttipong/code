@@ -1,6 +1,5 @@
 <template>
   <div class="wrapper" style="background-color:#e9ebee; height:100%">
-
     <!-- <div >
     <input type="file" @change="onFileChange" class="yr-button upload-file left">
   </div> -->
@@ -11,27 +10,49 @@
           <input type="file" @change="onFileChange" name="myfile" />
         </div>
 
-        <div v-else class="upload-btn-wrapper">
+        <div v-else class="upload-btn-wrapper left">
           <b-button class="yr-button cwhite bt-h mt-3" @click="removeImage">Remove Marker</b-button>
         </div>
-        <b-button class="cwhite add-button ml-3" style="margin-top:-30px" v-if="chackUpload" @click="addButton()">Upload Video
+        <div class="left ml-3 mt-3" v-if="chackUpload&&Layouts.lName=='Layout1'">
+          <b-button class="cwhite add-button" style="margin-top:0"  @click="addButton()">Upload Video
     </b-button>
+    <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBL()">Location
+    </b-button>
+    <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBG()">Gallery
+    </b-button>
+    <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBC()">Contact
+    </b-button>
+    <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBF()">Free Button
+    </b-button>
+
+    <b-button class="cwhite add-button" style="margin-top:0"  @click="reset()">Reset
+    </b-button>
+        <!-- <div  class="right ml-3 mt-2 cwhite">
+        <b-form-checkbox-group id="checkboxes2" name="flavour2" v-model="arBtSelect">
+        <b-form-checkbox value="location" @click="chackARBL()">Location</b-form-checkbox>
+        <b-form-checkbox value="gallery">Gallery</b-form-checkbox>
+        <b-form-checkbox value="contact">Contact</b-form-checkbox>
+        <b-form-checkbox value="freebutton">Free Button</b-form-checkbox>
+      </b-form-checkbox-group>
+</div> -->
+        </div>
     <b-button class="cwhite add-button mt-3 right" style="margin-top:-30px" @click="success()">เสร็จสิ้น</b-button>
       </b-container>
     </div>
 
     <div class="workspace" ref="workspace">
       <div v-for="element in elements" :key="element.id">
-        <b-button class="yr-button cwhite" @click="close()">X</b-button>
+        <!-- <b-button class="yr-button cwhite" @click="close()">X</b-button> -->
         <FreeTransform :x="element.x" :y="element.y" :scale-x="element.scaleX" :scale-y="element.scaleY" :width="element.width"
-          :height="element.height" :angle="element.angle" :offset-x="offsetX" :offset-y="offsetY" :disable-scale="element.disableScale === true"
+          :height="element.height" :angle="element.angle" :offset-x="offsetX" :offset-y="offsetY" :disable-scale="element.disableScale === true" :textIn="textIn"
           @update="update(element.id,$event)">
           <div class="element" :style="getElementStyles(element)">
-            <img src="../assets/armarker.jpg" width="420" height="315" style="border: 2px solid #333">
+            {{textIn}}
+            <!-- <img src="../assets/armarker.jpg" width="420" height="315" style="border: 2px solid #333"> -->
           </div>
         </FreeTransform>
       </div>
-      <img :src="image" width="798px" height="auto">
+      <img :src="image" width="700" height="auto">
     </div>
     <b-container>
     <b-form-textarea id="textarea2"
@@ -50,20 +71,124 @@
   import FreeTransform from 'vue-free-transform'
 
   export default {
+    props: ["Layouts"],
     name: 'app',
     components: {
       FreeTransform
     },
     data() {
       return {
-        elements: [],
+        passData: this.layouts,
+        bLocation: true,
+        bGallery: true,
+        bContact: true,
+        bFfreebtn: true,
+        elements: [
+          // {
+          //   id: "el-",
+          // x: 140,
+          // y: 230,
+          // scaleX: 1,
+          // scaleY: 1,
+          // width: 420,
+          // height: 315,
+          // angle: 0,
+          // classPrefix: "tr",
+          // disableScale: true,
+          // styles: {
+          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+          // }
+          // },
+          // {
+          //   id: "el-2",
+          // x: 0,
+          // y: 30,
+          // scaleX: 1,
+          // scaleY: 1,
+          // width: 300,
+          // height: 100,
+          // angle: 0,
+          // classPrefix: "tr",
+          // disableScale: true,
+          // styles: {
+          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+          // }
+          // },
+          // {
+          //   id: "el-3",
+          // x: 400,
+          // y: 90,
+          // scaleX: 1,
+          // scaleY: 1,
+          // width: 300,
+          // height: 100,
+          // angle: 0,
+          // classPrefix: "tr",
+          // disableScale: true,
+          // styles: {
+          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+          // }
+          // },
+          // {
+          //   id: "el-4",
+          // x: 0,
+          // y: 590,
+          // scaleX: 1,
+          // scaleY: 1,
+          // width: 300,
+          // height: 100,
+          // angle: 0,
+          // classPrefix: "tr",
+          // disableScale: true,
+          // styles: {
+          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+          // }
+          // },
+          // {
+          //   id: "el-5",
+          // x: 400,
+          // y: 650,
+          // scaleX: 1,
+          // scaleY: 1,
+          // width: 300,
+          // height: 100,
+          // angle: 0,
+          // classPrefix: "tr",
+          // disableScale: true,
+          // styles: {
+          //   background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+          // }
+          // }
+        ],
         inputMarker: [],
         offsetX: 0,
         offsetY: 0,
         image: '',
         chackUpload: false,
-        text: ''
+        text: '',
+        arBtSelect:[],
+        arButtonItem: [
+          {
+            arbName:'location',
+            value: 'location'
+          },
+          {
+            arbName: 'gallery',
+            value: 'gallery'
+          },
+          {
+            arbName: 'contact',
+            value: 'contact'
+          },
+          {
+            arbName: 'freebutton',
+            value: 'freebutton'
+          }
+        ]
       }
+    },
+    created(){
+      // console.log(this.Layouts)
     },
     mounted() {
       this.offsetX = this.$refs.workspace.offsetLeft
@@ -93,14 +218,15 @@
         let yr = Math.random();
         this.elements.push({
           id: "el-" + yr,
-          x: 0,
-          y: 0,
+          x: 140,
+          y: 230,
           scaleX: 1,
           scaleY: 1,
           width: 420,
           height: 315,
           angle: 0,
           classPrefix: "tr",
+
           styles: {
             background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
           }
@@ -143,7 +269,99 @@
         // this.$forceUpdate();
       },
       success(){
-        
+        this.$router.push({name:'ChackOrder',params:{dataChack: this.elements, dataChack2:this.inputMarker} })
+      },
+      chackARBL(){
+        if(this.bLocation == true){
+          this.bLocation = false
+          this.elements.push({
+          id: "el-2",
+          x: 0,
+          y: 30,
+          scaleX: 1,
+          scaleY: 1,
+          width: 300,
+          height: 100,
+          angle: 0,
+          classPrefix: "tr",
+          disableScale: true,
+          textIn: "Location",
+          styles: {
+            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)"
+          }
+        })
+        }else{
+          this.bLocation = true
+        }
+      },
+      chackARBG(){
+        if(this.bGallery == true){
+          this.bGallery = false
+          this.elements.push({
+           id: "el-3",
+          x: 400,
+          y: 90,
+          scaleX: 1,
+          scaleY: 1,
+          width: 300,
+          height: 100,
+          angle: 0,
+          classPrefix: "tr",
+          disableScale: true,
+          styles: {
+            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+          }
+        })
+        }else{
+          this.bGallery = true
+        }
+      },
+      chackARBC(){
+        if(this.bGallery == true){
+          this.bGallery = false
+          this.elements.push({
+           id: "el-4",
+          x: 0,
+          y: 590,
+          scaleX: 1,
+          scaleY: 1,
+          width: 300,
+          height: 100,
+          angle: 0,
+          classPrefix: "tr",
+          disableScale: true,
+          styles: {
+            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+          }
+        })
+        }else{
+          this.bGallery = true
+        }
+      },
+      chackARBF(){
+        if(this.bGallery == true){
+          this.bGallery = false
+          this.elements.push({
+           id: "el-5",
+          x: 400,
+          y: 650,
+          scaleX: 1,
+          scaleY: 1,
+          width: 300,
+          height: 100,
+          angle: 0,
+          classPrefix: "tr",
+          disableScale: true,
+          styles: {
+            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+          }
+        })
+        }else{
+          this.bGallery = true
+        }
+      },
+      reset(){
+        this.elements = []
       }
     }
   }
@@ -161,8 +379,8 @@
   }
 
   .workspace {
-    width: 800px;
-    height: 800px;
+    width: 700px;
+    height: auto;
     margin: 25px auto;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
     border: 1px solid rgba(0, 0, 0, 0.10);
@@ -281,7 +499,7 @@
   .item-bar {
     height: 80px;
     width: 100%;
-    background-color: #555;
+    background-color: #07bbf6;
   }
 
   .add-button{

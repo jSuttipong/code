@@ -110,6 +110,7 @@
 import HomeContent from '@/components/HomeContent'
 // import {userChack} from '@/components/Signin'
   export default {
+    props: ["userData","userSignin"],
     name: 'Home',
     // props:['userChack'],
     data() {

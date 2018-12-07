@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Prompt:400,700');
+@import 'vue-loading-overlay/dist/vue-loading.css';
 .con1364{
     width: 1364px !important;
 }
