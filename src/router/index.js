@@ -26,7 +26,8 @@ export default new Router({
     {
       path: '/Home',
       name: 'HomeContent',
-      component: HomeContent
+      component: HomeContent,
+      props: true
     },
     {
       path: '/Signin',
@@ -37,12 +38,14 @@ export default new Router({
     {
       path: '/Register',
       name: 'Register',
-      component: Register
+      component: Register,
+      props: true
     },
     {
       path: '/Product',
       name: 'Product',
-      component: Product
+      component: Product,
+      props: true
     },
     {
       path: '/Create',
@@ -53,7 +56,8 @@ export default new Router({
     {
       path: '/Payment',
       name: 'Payment',
-      component: Payment
+      component: Payment,
+      props: true
     },
     {
       path: '/Layout',

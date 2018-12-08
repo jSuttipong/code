@@ -5,7 +5,7 @@
                 <h1 class="center mt-5">Your Order</h1>
                 <div class="textName">คุณ {{userData.fname}} {{userData.lname}}</div>
                 <div><p>เบอร์โทร : {{userData.mobile}}</p></div>
-                <div style="width:100%;height:50px"><b-button class="yr-button order-btn">Orer ทั้งหมด</b-button></div>
+                <div style="width:100%;height:50px"><b-button class="yr-button order-btn">Order ทั้งหมด</b-button></div>
                 <vue-good-table
                 :columns="columns"
                 :search-options="{

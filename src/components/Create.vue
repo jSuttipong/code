@@ -6,10 +6,14 @@
     <div class="item-bar">
       <b-container>
         <div class="upload-btn-wrapper" v-if="!image">
-          <form action="">
+          <form action="" method="post" id="formData">
           <b-button class="yr-button cwhite bt-h mt-3">Upload Marker</b-button>
-          <input type="file" @change="onFileChange" id="files" name="files" />
+          <input type="file" @change="onFileChange"  id="filesData" name="filesData" />
           </form>
+          <!-- <form action="" method="post" id="formData" enctype="multipart/form-data">
+          <b-button class="yr-button cwhite bt-h mt-3">Upload Marker</b-button>
+          <input type="file"   id="filesData" name="filesData" />
+          </form> -->
         </div>
 
         <div v-else class="upload-btn-wrapper left">
@@ -43,8 +47,11 @@
         <FreeTransform :x="element.x" :y="element.y" :scale-x="element.scaleX" :scale-y="element.scaleY" :width="element.width"
           :height="element.height" :angle="element.angle" :offset-x="offsetX" :offset-y="offsetY" :disable-scale="element.disableScale === true" :textIn="textIn"
           @update="update(element.id,$event)">
-          <div class="element" :style="getElementStyles(element)">
-            {{textIn}}
+          <div class="element" :style="getElementStyles(element)" style="box-shadow: 5px 5px 10px grey; border-radius: 20px">
+            <!-- {{textIn}} -->
+            <div class="center pt-4 fontth cred" style="font-size: 30px; border:10px;">
+              {{element.textIn}}
+            </div>
             <!-- <img src="../assets/armarker.jpg" width="420" height="315" style="border: 2px solid #333"> -->
           </div>
         </FreeTransform>
@@ -57,12 +64,31 @@
     {{imageType}}
     <b-container>
     <b-form-textarea id="textarea2"
-                   v-model.trim="text"
-                   placeholder="ข้อความเพิ่มเติม"
+                   v-model="text"
+                   placeholder="ข้อความเพิ่มเติม เช่น location หรือ ความต้องการอื่นๆ"
                    :rows="3"
                    class="mb-5 mt-5"></b-form-textarea>
-      <b-button class="cwhite add-button mb-2 right" style="margin-top:-40px" @click="success()">เสร็จสิ้น</b-button>
+      <b-button class="cwhite add-button mb-2 right" type="submit" style="margin-top:-40px" @click="showData=true">ยืนยัน</b-button>
     </b-container>
+    <b-modal class="fontth" v-model="showData" size="lg" centered title="รายการ" @ok='goPayment()'>
+      <b-container>
+        <h3>Marker :</h3>
+        <div class="center">
+          <img :src="this.image"  style="width:300px">
+        </div>
+        <div class="mt-3 mb-3">
+          <h3>วีดีโอ :</h3>
+        </div>
+        <h3>ปุ่มกด :</h3>
+        <div v-for="element in elements" :key="element.id" class="left">
+          <p class="mr-5">{{element.textInBtn}}</p>
+        </div>
+        <div>
+          <h3>ข้อความเพิ่มเติม :</h3>
+          {{text}}
+        </div>
+      </b-container>
+    </b-modal>
   </div>
 
 </template>
@@ -77,7 +103,7 @@ const axios = require('axios');
     name: 'app',
     components: {
       FreeTransform,
-      Loading
+      Loading,
     },
     data() {
       return {
@@ -93,9 +119,11 @@ const axios = require('axios');
         offsetY: 0,
         image: '',
         imageType: '',
+        showData:false,
         videoData:'',
         isLoading: false,
         chackUpload: false,
+        textIn: "",
         text: '',
         arBtSelect:[],
         arButtonItem: [
@@ -155,11 +183,12 @@ const axios = require('axios');
           scaleY: 1,
           width: 420,
           height: 315,
+          textIn: "Your Video",
           angle: 0,
           classPrefix: "tr",
 
           styles: {
-            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+            background: "#fff",
           }
         })
         console.log(this.elements)
@@ -197,7 +226,7 @@ const axios = require('axios');
         reader.readAsDataURL(file);
         this.imageType = document.getElementById('markerFile');
         this.chackUpload = true
-        this.videoData = this.image;
+        // this.videoData = this.image;
         // console.log(vm.image.width  )
              setTimeout(() => {
             this.isLoading = false
@@ -206,6 +235,7 @@ const axios = require('axios');
       },
       removeImage: function (e) {
         this.image = '';
+        this.elements = []
         this.chackUpload = false
         // this.$forceUpdate();
       },
@@ -214,9 +244,10 @@ const axios = require('axios');
         // var filess = document.getElementById('files');
         this.isLoading = true;
         var querystring = require('querystring');
-
+        // var filesData = document.getElementById('filesData')
+        // console.log("-----------------"+filesData)
         var chackEP = querystring.stringify({
-          chk_data: this.videoData,
+          files : this.videoData,
         });
         const config = {
           headers: {
@@ -228,6 +259,7 @@ const axios = require('axios');
           .then((result) => {
               console.log(result)
               console.log('sccess')
+              // console.log(this.videoData)
               // this.$router.push( {name:'Home'})
               this.isLoading = false
               // this.$router.push('http://fishyutt.xyz/api/youry/uploads.php' )
@@ -257,11 +289,12 @@ const axios = require('axios');
           height: 100,
           angle: 0,
           classPrefix: "tr",
-          disableScale: true,
+          disableScale: false,
           textIn: "Location",
+          textInBtn: "Location",
           styles: {
-            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)"
-          }
+            background: "#fff"  
+          },
         })
         }else{
           this.bLocation = true
@@ -280,9 +313,11 @@ const axios = require('axios');
           height: 100,
           angle: 0,
           classPrefix: "tr",
-          disableScale: true,
+          textIn: "Gallery",
+          textInBtn: "Gallery",
+          disableScale: false,
           styles: {
-            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+            background: "#fff",
           }
         })
         }else{
@@ -290,29 +325,34 @@ const axios = require('axios');
         }
       },
       chackARBC(){
-        if(this.bGallery == true){
-          this.bGallery = false
+        if(this.bContact == true){
+          this.bContact = false
           this.elements.push({
            id: "el-4",
           x: 0,
-          y: 590,
+          y: 400,
           scaleX: 1,
           scaleY: 1,
           width: 300,
           height: 100,
           angle: 0,
           classPrefix: "tr",
-          disableScale: true,
+          textIn: "Contact",
+          textInBtn: "Contact",
+          disableScale: false,
           styles: {
-            background: "linear-gradient(135deg, #0FF0B3 0%,#036ED9 100%)",
+            background: "#fff",
           }
         })
         }else{
-          this.bGallery = true
+          this.bContact = true
         }
       },
       reset(){
         this.elements = []
+      },
+      goPayment(){
+        this.$router.push( {name:'Payment',params: { imgResult: this.image}})
       }
     }
   }
