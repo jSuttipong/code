@@ -2,14 +2,17 @@
   <div>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
       crossorigin="anonymous">
-    <b-navbar toggleable="md" type="dark" variant="info" style="box-shadow: 0px 1px 6px #888888; position:fixed;z-index:1; width:100%">
+    <b-navbar toggleable="md" type="dark" variant="info" style="box-shadow: 0px 1px 6px #888888; position:fixed;z-index:5 !important ; width:100%">
       <b-container>
         <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
         <b-navbar-brand >
           <router-link to="/"><img src="./assets/logo.png" height="50" width="auto" /></router-link>
         </b-navbar-brand>
-        <b-collapse is-nav id="nav_collapse">
-          <router-link to="/Product">Product </router-link>
+        <b-collapse is-nav id="nav_collapse" class="fontth">
+          <router-link to="/Home" class="mr-3">หน้าแรก </router-link>
+          <router-link to="/Product" class="mr-3">สินค้า </router-link>
+          <router-link to="/Home" class="mr-3">ราคา </router-link>
+          <router-link to="/Home" class="mr-3">เกี่ยวกับเรา </router-link>
           <!-- <b-navbar-nav>
             <b-nav-item href="#">Home</b-nav-item>
             <b-nav-item href="#">Showcase</b-nav-item>
@@ -26,7 +29,7 @@
                 <b-modal id="checkSignOut" ref="modalSignOut" hide-footer title="Sign Out" >
                   <p class="my-4 cred">คุณต้องการออกจากระบบหรือไม่</p>
                   <b-button @click="cSignout()" class="yr-button">ตกลง</b-button>
-                  <b-button class="yr-button mr-3" style="background-color:#999; border:none">ยกเลิก</b-button>
+                  <b-button class="yr-button mr-3" @click="hideModal()" style="background-color:#999; border:none">ยกเลิก</b-button>
                 </b-modal>
               </div>
           </b-navbar-nav>
@@ -127,6 +130,7 @@ export default {
 </script>
 
 <style>
+
 @import './assets/Style.css';
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

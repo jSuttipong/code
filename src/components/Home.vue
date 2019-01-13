@@ -72,8 +72,8 @@
           <b-col md="4">
             <i class="fas fa-expand-arrows-alt" v-b-modal.modal1></i>
             <img src="../assets/product/bookcover.png" style="width:auto; height:300px;">
-            <b-modal id="modal1">
-              <img src="../assets/product/bookcover.png" size="lg">
+            <b-modal id="modal1" class="center">
+              <img src="../assets/product/bookcover.png" style="width:400px" size="lg">
             </b-modal>
           </b-col>
         </b-row>

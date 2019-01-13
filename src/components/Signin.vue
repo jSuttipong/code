@@ -101,8 +101,8 @@ const axios = require('axios');
         this.isLoading = false
         var querystring = require('querystring');
         var chackEP = querystring.stringify({
-          User_email: this.email,
-          User_password: this.password,
+          user_email: this.email,
+          user_password: this.password,
         });
 
         const config = {
@@ -111,9 +111,11 @@ const axios = require('axios');
           }
         }
         this.isLoading = true;
-        axios.post('http://fishyutt.xyz/api/youry/chk_user.php', chackEP, config)
+        axios.post('http://fishyutt.xyz/dev/admin/files/api/users_api/check_user_login.php', chackEP, config)
           .then((result) => {
-            if(result.data[0].Status_user == true){
+            console.log(result.data)
+            console.log(result)
+            if(result.data[0].result == true){
               // this.isLoading = true;
               // this.render()
               console.log('Login success')

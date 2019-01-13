@@ -35,6 +35,9 @@
                 <h5>สถานะ : {{passData.status}}</h5>
                 <div v-for="item in imgData" :key="item">
                     <img :src="item.markerPath" alt="" class="left mr-3 ml-3 mt-3" style="width:200px;height:130px">
+                    <video width="50%" controls>
+                            <source :src="item.videoPath" type="video/mp4">
+                          </video>
                 </div>
                 <!-- {{passData}} -->
             </b-modal>
@@ -70,8 +73,8 @@ export default {
           label: 'Created On',
           field: 'createdAt',
           type: 'date',
-          dateInputFormat: 'YYYY-MM-DD',
-          dateOutputFormat: 'DD MMM YYYY',
+          dateInputFormat: 'YYYY-MM-DD h:mm:ss7',
+          dateOutputFormat: 'DD MMM YYYY h:mm:ss',
         },
         {
           label: 'ราคา',
@@ -88,11 +91,13 @@ export default {
     },
     mounted(){
         this.isLoading = true;
-       const getUserData = this.$session.get('sessionData')
-       this.userData = getUserData[0]
+    //    const getUserData = this.$session.get('sessionData')
+    //    this.userData = getUserData[0]
+    //    console.log('--------'+this.$session.get('sessionData'))
         var querystring = require('querystring');
         var chackEP = querystring.stringify({
-          user_id: this.userData.User_id,
+            user_id: '4'
+        //   user_id: this.userData.User_id,
         //   User_password: this.password,
         });
 
@@ -101,18 +106,42 @@ export default {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
-        axios.post('http://fishyutt.xyz/api/youry/adminy/order_user.php', chackEP, config)
+        var theData = new FormData();
+        theData.append('user_id','4');
+        var rawData = {
+            user_id: '4',
+        }
+        rawData = JSON.stringify(rawData) 
+        // axios({
+        //           method: 'post',
+        //           url: 'http://fishyutt.xyz/dev/admin/files/api/users_api/order_user_detail.php',
+        //           data: theData,
+        //           config: { headers: {'Content-Type': 'multipart/form-data' }}
+        //       })
+        axios.post('http://fishyutt.xyz/dev/admin/files/api/users_api/order_user_detail.php', chackEP, config)
+//         axios.get('http://fishyutt.xyz/dev/admin/files/api/users_api/order_user_detail.php', {
+//     params: {
+//       user_id: '4'
+//     }
+//   })
           .then((result) => {
-            // console.log(result.data)
+            console.log(result)
+            console.log(result.data)
             const data = result.data
-            // console.log(data.length)
+            console.log(data.length)
             for (var i = 0; i < data.length; i++) { 
                 this.rows.push({orderId:data[i].order_id,
             orderType:data[i].order_type,
-            createdAt: data[i].order_time,
+            createdAt: data[i].order_date,
             price: data[i].order_price,
             status: data[i].order_status})
             }
+
+            // for (var i = 0; i < data.length; i++) { 
+            //     this.imgData.push({markerPath:data[i].marker.marker_img,
+            //     videoPath:data[i].marker.marker_vdo,
+            // })
+            // }
             // console.log(this.rows)
 
             // console.log(this.rows)
@@ -135,11 +164,11 @@ export default {
                 }else this.rows[i].status = "เสร็จสิ้น"
             }
             
-            for (var i = 0; i < data.length; i++) { 
-                var c = numeral(this.rows[i].price).format('0,0')
-                this.rows[i].price = c
+            // for (var i = 0; i < data.length; i++) { 
+            //     var c = numeral(this.rows[i].price).format('0,0')
+            //     this.rows[i].price = c
                 
-            }
+            // }
         // if(this.rows.orderType == 0){
         //     return 'โฟโต้บุ๊ค'
         // }else return 'การ์ด';
@@ -172,7 +201,7 @@ export default {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
-        axios.post('http://fishyutt.xyz/api/youry/adminy/order_user_detail.php', chackEP, config)
+        // axios.post('http://fishyutt.xyz/dev/admin/files/api/users_api/order_user_detail.php', chackEP, config)
           .then((result) => {
             // console.log(result.data)
             // this.imgData.push(result.data)
@@ -180,8 +209,8 @@ export default {
             const data = result.data
             // console.log(data)
             for (var i = 0; i < data.length; i++) { 
-                this.imgData.push({markerName:data[i].marker_image_name,
-                markerPath:data[i].marker_image_path,
+                this.imgData.push({markerPath:data[i].marker_img,
+                videoPath:data[i].marker_vdo,
             })
             }
             // console.log(this.imgData)

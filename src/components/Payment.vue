@@ -1,9 +1,8 @@
 <template>
     <div class="fontth mt-5 mb-5" style="min-height:567px">
         <b-container>
-            <h3>ข้อมูลบัตรเครดิต/เดบิต</h3>
+            <!-- <h3>ข้อมูลบัตรเครดิต/เดบิต</h3> -->
             <!-- <b-input-group size="sm">
-                
             <h5>ธนาคาร</h5>
             <b-form-input v-model="bankName"></b-form-input>
             <h5>เลขบนบัตร</h5>
@@ -13,13 +12,18 @@
             <h5>CVV *ด้านหลังของบัตร</h5>
             <b-form-input v-model="cvv"></b-form-input>
             </b-input-group> -->
-            <b-card text-variant="black" header="" class="text-center signin-group ">
-        <b-form-input v-model="email" type="text" placeholder="ธนาคาร" class="signin-input mb-3"></b-form-input>
-        <b-form-input v-model="email" type="text" placeholder="เลขบนบัตร" class="signin-input mb-3"></b-form-input>
-        <b-form-input v-model="email" type="text" placeholder="วันที่หมดอายุ" class="signin-input mb-3"></b-form-input>
-        <b-form-input v-model="password" type="password" placeholder="CVV *ด้านหลังของบัตร" class="signin-input mb-3"></b-form-input>
-
-         <div class="vld-parent">
+        <b-card text-variant="black" header="ข้อมูลบัตรเครดิต/เดบิต" class="text-center signin-group " style="width:50%">
+        <p class="left mb-1" style="font-size:14px">ธนาคาร</p>
+        <b-form-input v-model="bankName" type="text" placeholder="krungthai bank" class="signin-input mb-3"></b-form-input>
+        <p class="left mb-1" style="font-size:14px">ชื่อบนบัตร</p>
+        <b-form-input v-model="nameOnCard" type="text" placeholder="Suttipong Senasuttiphan" class="signin-input mb-3"></b-form-input>
+        <p class="left mb-1" style="font-size:14px">เลขบนบัตร</p>
+        <b-form-input v-model="bankNumber" type="text" placeholder="1234 4567 8912 3456" class="signin-input mb-3"></b-form-input>
+        <p class="left mb-1" style="font-size:14px">วันที่หมดอายุ</p>
+        <b-form-input v-model="cardDate" type="text" placeholder="08/20" class="signin-input mb-3 left mr-3" style="width:"></b-form-input>
+        <p class="mb-1 left" style="font-size:14px">cvv *ด้านหลังบัตร</p>
+        <b-form-input v-model="cvv" type="password" placeholder="123" class="signin-input mb-3 " style=""></b-form-input>
+        <div class="vld-parent">
         <loading :active.sync="isLoading"
         :can-cancel="false"
         loader='dots'
@@ -27,20 +31,25 @@
         backgroundColor= '#ffffff'
         :is-full-page="true"></loading>
         </div>
-
         <!-- <bar-loader class="custom-class" :loading="loading" :size="150" :sizeUnit="px"></bar-loader> -->
         <!-- <b-button class="yr-button" @click="cLogout()" type="submit">Sign Out</b-button> -->
       </b-card>
         <!-- {{imgResult}} -->
         <div class="mt-4">
-        <b-button class="yr-button" @click="createOrder()">ยืนยัน</b-button>
+        <b-button class="yr-button"  v-b-modal.checkC>ยืนยัน</b-button>
         <b-button class="yr-button" style="background-color:#999; border:none" @click="cancer()">ยกเลิก</b-button>
         </div>
         </b-container>
-        
+
+        <b-modal id="checkC" ref="myModalRef" hide-footer title="ยืนยันการจ่ายเงิน" >
+                  <p class="my-4 cred">ยืนยัน</p>
+                  <b-button @click="createOrder()" class="yr-button">ตกลง</b-button>
+                  <b-button class="yr-button mr-3" @click="hideModal" style="background-color:#999; border:none">ยกเลิก</b-button>
+        </b-modal>
     </div>
 </template>
 <script>
+/* eslint-disable */
 import Loading from 'vue-loading-overlay';
 const axios = require('axios');
     export default {
@@ -51,7 +60,12 @@ const axios = require('axios');
   name: 'App',
   data(){
       return{
-          isLoading: false
+          isLoading: false,
+          bankName: '',
+          nameOnCard: '',
+          bankNumber: '',
+          cardDate: '',
+          cvv: '789',
       }
   },
   methods:{
@@ -82,7 +96,16 @@ const axios = require('axios');
       },
       cancer(){
           this.$router.push( {name:'Home',})
-      }
+      },
+      hideModal () {
+      this.$refs.myModalRef.hide()
+    }
   }
 }    
 </script>
+<style>
+.helper {
+    display: table-cell;
+    vertical-align: middle;
+  }
+</style>

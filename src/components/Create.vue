@@ -1,38 +1,61 @@
 <template>
-  <div class="wrapper" style="background-color:#e9ebee; height:100%">
-    <!-- <div >
-    <input type="file" @change="onFileChange" class="yr-button upload-file left">
-  </div> -->
-    <div class="item-bar">
-      <b-container>
-        <div class="upload-btn-wrapper" v-if="!image">
-          <form action="" method="post" id="formData">
-          <b-button class="yr-button cwhite bt-h mt-3">Upload Marker</b-button>
-          <input type="file" @change="onFileChange"  id="filesData" name="filesData" />
-          </form>
-          <!-- <form action="" method="post" id="formData" enctype="multipart/form-data">
-          <b-button class="yr-button cwhite bt-h mt-3">Upload Marker</b-button>
-          <input type="file"   id="filesData" name="filesData" />
-          </form> -->
-        </div>
+  <div class="wrapper fontth" style="background-color:#e9ebee; height:100%">
+      <div v-if="themeSelection == false">
+        <b-container class="pt-3">
+          <h1 class="mb-3">เลือกธีม AR</h1>
+          <div v-for="themeItem in themeItem" :key="themeItem.themeTag" >
+            <div @click="selectTheme(themeItem)">
+              <div class="box-on">
+                <h3 class="text-on-pic cwhite">{{themeItem.themeName}}</h3>
+                <img class="theme-select" :src="themeItem.themepic" alt="">
+              </div>
+            </div>
+          </div>
 
-        <div v-else class="upload-btn-wrapper left">
-          <b-button class="yr-button cwhite bt-h mt-3" @click="removeImage" style="background-color:#e53167;border:none">Remove Marker</b-button>
+    <!-- <form ref="myForm">
+      <input type="file" name="files" id="file" ref="file" @change="onFileChange"/>
+      <b-button @click="go()">send</b-button>
+    </form>
+    <form ref="my2">
+      <input type="file" name="vdo" id="file" ref="file" />
+      <b-button @click="go()">send</b-button>
+    </form> -->
+
+    <img :src="image" style="display: flex; justify-content: center;">
+        </b-container>
+      </div>
+     <div v-else>
+        <div class="box-onbanner">
+            <h1 class="text-on-banner cwhite">{{selecttionItem.themeName}}</h1>
+            <img class="theme-banner" :src="selecttionItem.themepic" alt="">
         </div>
-        <div class="left ml-3 mt-3" v-if="image">
-          <b-button class="cwhite add-button" style="margin-top:0;background-color:#707070 !important;border:none"  @click="addButton()">Upload Video
-    </b-button>
-    <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBL()">Location
-    </b-button>
-    <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBG()">Gallery
-    </b-button>
-    <b-button class="cwhite add-button" style="margin-top:0"  @click="chackARBC()">Contact
-    </b-button>
-    <b-button class="cwhite add-button" style="margin-top:0"  @click="reset()">Reset
-    </b-button>
-        </div>
-      </b-container>
-    </div>
+        <b-container class="mt-3 mb-5">
+          <p>{{selecttionItem.themeDetail}}</p>
+          <b-carousel id="carousel1" class="mt-5"
+                style="text-shadow: 1px 1px 2px #333;width:50%;margin-left: auto;margin-right: auto;"
+                controls
+                indicators
+                background="#ababab"
+                :interval="4000"
+                img-width="300"
+                img-height="480"
+                v-model="slide"
+                @sliding-start="onSlideStart"
+                @sliding-end="onSlideEnd"
+          >
+            <div v-for=" data in selecttionItem.themeEx" :key="data.ex">
+              <b-carousel-slide :img-src="data.ex"
+              ></b-carousel-slide>
+            </div>
+          </b-carousel>
+          <p class="mt-2 cred">*นี่เป็นเพียงตัวอย่างที่นำมาแสดงเท่านั้น เมื่อสั่งทำการออกแบบจะเปลี่ยนแปลงตามความต้องการ</p>
+      <div class="mt-5 center">
+        <b-button @click="back()" class="yr-button">ยกเลิก</b-button>
+        <b-button @click="next()" class="yr-button">ตกลง</b-button>
+      </div>
+
+        </b-container>
+      </div>
     <div class="vld-parent">
         <loading :active.sync="isLoading"
         :can-cancel="false"
@@ -41,60 +64,14 @@
         backgroundColor= '#ffffff'
         :is-full-page="true"></loading>
         </div>
-    <div class="workspace" ref="workspace">
-      <div v-for="element in elements" :key="element.id">
-        <!-- <b-button class="yr-button cwhite" @click="close()">X</b-button> -->
-        <FreeTransform :x="element.x" :y="element.y" :scale-x="element.scaleX" :scale-y="element.scaleY" :width="element.width"
-          :height="element.height" :angle="element.angle" :offset-x="offsetX" :offset-y="offsetY" :disable-scale="element.disableScale === true" :textIn="textIn"
-          @update="update(element.id,$event)">
-          <div class="element" :style="getElementStyles(element)" style="box-shadow: 5px 5px 10px grey; border-radius: 20px">
-            <!-- {{textIn}} -->
-            <div class="center pt-4 fontth cred" style="font-size: 30px; border:10px;">
-              {{element.textIn}}
-            </div>
-            <!-- <img src="../assets/armarker.jpg" width="420" height="315" style="border: 2px solid #333"> -->
-          </div>
-        </FreeTransform>
-      </div>
-      <img :src="image" width="700" height="auto" >
-      <!-- <video width="400" controls>
-  <source :src="videoData.name" type="video/mp4">
-</video> -->
-    </div>
-    {{imageType}}
-    <b-container>
-    <b-form-textarea id="textarea2"
-                   v-model="text"
-                   placeholder="ข้อความเพิ่มเติม เช่น location หรือ ความต้องการอื่นๆ"
-                   :rows="3"
-                   class="mb-5 mt-5"></b-form-textarea>
-      <b-button class="cwhite add-button mb-2 right" type="submit" style="margin-top:-40px" @click="showData=true">ยืนยัน</b-button>
-    </b-container>
-    <b-modal class="fontth" v-model="showData" size="lg" centered title="รายการ" @ok='goPayment()'>
-      <b-container>
-        <h3>Marker :</h3>
-        <div class="center">
-          <img :src="this.image"  style="width:300px">
-        </div>
-        <div class="mt-3 mb-3">
-          <h3>วีดีโอ :</h3>
-        </div>
-        <h3>ปุ่มกด :</h3>
-        <div v-for="element in elements" :key="element.id" class="left">
-          <p class="mr-5">{{element.textInBtn}}</p>
-        </div>
-        <div>
-          <h3>ข้อความเพิ่มเติม :</h3>
-          {{text}}
-        </div>
-      </b-container>
-    </b-modal>
+    <!-- {{imageType}} -->
   </div>
 
 </template>
 
 <script>
 /* eslint-disable */
+
 import Loading from 'vue-loading-overlay';
 import FreeTransform from 'vue-free-transform'
 const axios = require('axios');
@@ -107,16 +84,16 @@ const axios = require('axios');
     },
     data() {
       return {
+        userData: '',
+        slide: 0,
+      sliding: null,
+        file : '',
+        themeSelection: false,
+        selecttionItem: null,
         passData: this.layouts,
-        bLocation: true,
-        bGallery: true,
-        bContact: true,
-        bFfreebtn: true,
         elements: [
         ],
         inputMarker: [],
-        offsetX: 0,
-        offsetY: 0,
         image: '',
         imageType: '',
         showData:false,
@@ -125,6 +102,8 @@ const axios = require('axios');
         chackUpload: false,
         textIn: "",
         text: '',
+        my2: '',
+        myFormData: '',
         arBtSelect:[],
         arButtonItem: [
           {
@@ -143,55 +122,132 @@ const axios = require('axios');
             arbName: 'freebutton',
             value: 'freebutton'
           }
+        ],
+        themeItem: [
+          {
+            themeName: 'VINTAGE',
+            themeTag: 'vintage',
+            themeDetail: 'เหมยเฮียแชมพูสป็อต เซ็นทรัลอ่อนด้อยอีโรติก รีดไถเทค ออสซี่ เทียมทานครูเสดเซ็นทรัล ออทิสติกฟีดตนเองติ๋มฟินิกซ์สตาร์มิลค์ เคลมไวกิ้งเซรามิกนายพราน มะกัน รากหญ้า ซัพพลายเออร์ซูเอี๋ยติ๋มแจ๊กพอตเมจิก คอนเซ็ปต์ ไอซ์ รีไซเคิลโซนี่',
+            themepic: require('../assets/theme/vintage.jpg'),
+            themeEx: [{
+              ex: require('../assets/theme/1-ex/ex1.png'),
+            },
+            {
+              ex: require('../assets/theme/1-ex/ex2.png'),
+            },
+            {
+              ex: require('../assets/theme/1-ex/ex3.png'),
+            }
+
+            ]
+              
+          },
+          {
+            themeName: 'MODERN',
+            themeTag: 'modern',
+            themeDetail: 'เหมยเฮียแชมพูสป็อต เซ็นทรัลอ่อนด้อยอีโรติก รีดไถเทค ออสซี่ เทียมทานครูเสดเซ็นทรัล ออทิสติกฟีดตนเองติ๋มฟินิกซ์สตาร์มิลค์ เคลมไวกิ้งเซรามิกนายพราน มะกัน รากหญ้า ซัพพลายเออร์ซูเอี๋ยติ๋มแจ๊กพอตเมจิก คอนเซ็ปต์ ไอซ์ รีไซเคิลโซนี่',
+            themepic: require('../assets/theme/modern.jpg')
+          },
+          {
+            themeName: 'BLACK AND WHITE',
+            themeTag: 'bandw',
+            themeDetail: 'เหมยเฮียแชมพูสป็อต เซ็นทรัลอ่อนด้อยอีโรติก รีดไถเทค ออสซี่ เทียมทานครูเสดเซ็นทรัล ออทิสติกฟีดตนเองติ๋มฟินิกซ์สตาร์มิลค์ เคลมไวกิ้งเซรามิกนายพราน มะกัน รากหญ้า ซัพพลายเออร์ซูเอี๋ยติ๋มแจ๊กพอตเมจิก คอนเซ็ปต์ ไอซ์ รีไซเคิลโซนี่',
+            themepic: require('../assets/theme/bandw.jpg')
+          },
+          {
+            themeName: 'GARDEN PARTY',
+            themeTag: 'garden',
+            themeDetail: 'เหมยเฮียแชมพูสป็อต เซ็นทรัลอ่อนด้อยอีโรติก รีดไถเทค ออสซี่ เทียมทานครูเสดเซ็นทรัล ออทิสติกฟีดตนเองติ๋มฟินิกซ์สตาร์มิลค์ เคลมไวกิ้งเซรามิกนายพราน มะกัน รากหญ้า ซัพพลายเออร์ซูเอี๋ยติ๋มแจ๊กพอตเมจิก คอนเซ็ปต์ ไอซ์ รีไซเคิลโซนี่',
+            themepic: require('../assets/theme/garden.jpg')
+          }
         ]
       }
     },
     created(){
       // console.log(this.Layouts)
+      // var querystring = require('querystring');
+
+
+        
+      // axios.get('http://fishyutt.xyz/dev/admin/files/api/query_theme.php')
+      //     .then((result) => {
+      //       console.log('555555555555555555555555555555')
+      //       console.log(result)
+            
+      //     })
+      //     .catch((error) => {
+      //       console.log(error.response)
+      //     })
     },
     mounted() {
-      this.offsetX = this.$refs.workspace.offsetLeft
-      this.offsetY = this.$refs.workspace.offsetTop
+      // const getUserData = this.$session.get('sessionData')
+      //  this.userData = getUserData[0]
     },
     methods: {
-      update(id, payload) {
-        this.elements = this.elements.map(item => {
-          if (item.id === id) {
-            return {
-              ...item,
-              ...payload
-            }
-          }
-          return item
-        })
-      },
-      getElementStyles(element) {
-        const styles = element.styles ? element.styles : {}
-        return {
-          width: `${element.width}px`,
-          height: `${element.height}px`,
-          ...styles
-        }
-      },
-      addButton() {
-        let yr = Math.random();
-        this.elements.push({
-          id: "el-" + yr,
-          x: 140,
-          y: 230,
-          scaleX: 1,
-          scaleY: 1,
-          width: 420,
-          height: 315,
-          textIn: "Your Video",
-          angle: 0,
-          classPrefix: "tr",
+      onSlideStart (slide) {
+      this.sliding = true
+    },
+    onSlideEnd (slide) {
+      this.sliding = false
+    },
+    onFileChange(e) {
+    //   this.markerData = new FormData(this.$refs.marker);
+    // this.markerData = e.target.files[0]
+    this.myFormData = new FormData(this.$refs.myForm)
+    // console.log('1111'+this.myFormData)
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      this.isLoading = true;
+      setTimeout(() => {
+        var image = new Image();
+        var reader = new FileReader();
+        var vm = this;
 
-          styles: {
-            background: "#fff",
-          }
-        })
-        console.log(this.elements)
+        reader.onload = e => {
+          vm.image = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        this.isLoading = false;
+      }, 500);
+    },
+    removeImage: function(e) {
+      this.image = "";
+    },
+      go(){
+        this.isLoading = true
+        var myFormData2 = new FormData(this.$refs.my2)
+        var querystring = require('querystring');
+        // console.log('*******************'+this.formData2+'**********************')
+        var chackEP = querystring.stringify({
+          files: this.myFormData,
+          vdo: this.myFormData2
+        });
+
+        console.log(this.myFormData)
+        axios({
+                  method: 'post',
+                  url: 'http://fishyutt.xyz/dev/admin/files/api/orders_api/insert_order_card.php',
+                  data: this.chackEP,
+                  config: { headers: {'Content-Type': 'multipart/form-data' }}
+              }).then((result) => {
+              console.log(result)
+              console.log('sccess')
+              this.isLoading = false
+          })
+          .catch((error) => {
+            // Do somthing
+            this.isLoading = false
+            console.log(error)
+            console.log(error.response)
+          })
+      },
+      selectTheme(data){
+        this.themeSelection = true
+        this.selecttionItem = data
+        console.log(this.selecttionItem)
       },
       close: function (elements) {
 
@@ -199,47 +255,53 @@ const axios = require('axios');
         this.elements = []
 
       },
-      onFileChange(e) {
-        this.isLoading = true
-        // console.log(e)
-        var files = e.target.files ;
-        this.videoData = files;
-        console.log(this.videoData)
-        if (!files.length)
-          return;
+      // onFileChange(e) {
+      //   this.isLoading = true
+      //   // console.log(e)
+      //   var files = e.target.files ;
+      //   this.videoData = files;
+      //   console.log(this.videoData)
+      //   if (!files.length)
+      //     return;
 
-        this.createImage(files[0]);
+      //   this.createImage(files[0]);
         
 
-      },
-      createImage(file) {
+      // },
+      // createImage(file) {
         
-        var image = new Image();
-        var reader = new FileReader();
-        var vm = this;
+      //   var image = new Image();
+      //   var reader = new FileReader();
+      //   var vm = this;
         
-        reader.onload = (e) => {
-          vm.image = e.target.result;
-          // vm.imageType = e;
-          // console.log(vm.image.naturalWidth)
-        };
-        reader.readAsDataURL(file);
-        this.imageType = document.getElementById('markerFile');
-        this.chackUpload = true
-        // this.videoData = this.image;
-        // console.log(vm.image.width  )
-             setTimeout(() => {
-            this.isLoading = false
-      },2000)
-        console.log('---------------------')
-      },
-      removeImage: function (e) {
-        this.image = '';
-        this.elements = []
-        this.chackUpload = false
-        // this.$forceUpdate();
-      },
+      //   reader.onload = (e) => {
+      //     vm.image = e.target.result;
+      //     // vm.imageType = e;
+      //     // console.log(vm.image.naturalWidth)
+      //   };
+      //   reader.readAsDataURL(file);
+      //   this.imageType = document.getElementById('markerFile');
+      //   this.chackUpload = true
+      //   // this.videoData = this.image;
+      //   // console.log(vm.image.width  )
+      //        setTimeout(() => {
+      //       this.isLoading = false
+      // },2000)
+      //   console.log('---------------------')
+      // },
+      // removeImage: function (e) {
+      //   this.image = '';
+      //   this.elements = []
+      //   this.chackUpload = false
+      //   // this.$forceUpdate();
+      // },
+      
       success(){
+         $("form").submit(function(evt){	 
+           console.log('55555555555555555555555555555555555555555555')
+      evt.preventDefault();
+      var formData = new FormData($(this)[0]);
+      
         // this.$router.push({name:'ChackOrder',params:{dataChack: this.elements, dataChack2:this.inputMarker} })
         // var filess = document.getElementById('files');
         this.isLoading = true;
@@ -247,7 +309,7 @@ const axios = require('axios');
         // var filesData = document.getElementById('filesData')
         // console.log("-----------------"+filesData)
         var chackEP = querystring.stringify({
-          files : this.videoData,
+          files : formData,
         });
         const config = {
           headers: {
@@ -255,7 +317,7 @@ const axios = require('axios');
           }
         }
         
-        axios.post('http://fishyutt.xyz/api/youry/uploads.php', chackEP, config)
+        axios.post('http://fishyutt.xyz/dev/admin/files/api/orders_api/insert_order_card.php', chackEP, config)
           .then((result) => {
               console.log(result)
               console.log('sccess')
@@ -275,84 +337,52 @@ const axios = require('axios');
         // document.getElementById('input').files[0]
         // console.log('---------------------'+e)
         // this.$router.push( {name:'ChackOrder',params: { imgData: this.image,imageType:myFile}})
+      })},
+      // reset(){
+      //   this.elements = []
+      // },
+      // goPayment(){
+      //   this.$router.push( {name:'Payment',params: { imgResult: this.image}})
+      // }
+      next(){
+        this.isLoading = true
+      //   var myFormData = new FormData(this.$refs.myForm)
+      //   // console.log(myFormData)
+      //  var querystring = require('querystring');
+      //   var chackEP = querystring.stringify({
+      //   //   order_id: '',
+      //       user_id: this.userData.User_id,
+      //       order_type: '2',
+      //       theme_id : '2'
+
+      //   //   User_password: this.password,
+      //   });
+
+      //   const config = {
+      //     headers: {
+      //       'Content-Type': 'application/x-www-form-urlencoded'
+      //     }
+      //   }
+      //   axios.post('http://fishyutt.xyz/dev/admin/files/api/orders_api/create_order.php', chackEP, config)
+      //     .then((result) => {
+
+      //       const data = result.data
+      //       console.log('data-------------'+result)
+      //       console.log('data-------------'+data)
+      //       this.isLoading = false
+      //     })
+      //     .catch((error) => {
+      //       console.log('dataerror--------'+error.response)
+      //       this.isLoading = false
+      //     })
+        setTimeout(() => {
+          this.$router.push( {name:'OrderCreate',params: { themeResult: this.selecttionItem}})
+                  this.isLoading = false
+        },500)
+        
       },
-      chackARBL(){
-        if(this.bLocation == true){
-          this.bLocation = false
-          this.elements.push({
-          id: "el-2",
-          x: 0,
-          y: 30,
-          scaleX: 1,
-          scaleY: 1,
-          width: 300,
-          height: 100,
-          angle: 0,
-          classPrefix: "tr",
-          disableScale: false,
-          textIn: "Location",
-          textInBtn: "Location",
-          styles: {
-            background: "#fff"  
-          },
-        })
-        }else{
-          this.bLocation = true
-        }
-      },
-      chackARBG(){
-        if(this.bGallery == true){
-          this.bGallery = false
-          this.elements.push({
-           id: "el-3",
-          x: 400,
-          y: 90,
-          scaleX: 1,
-          scaleY: 1,
-          width: 300,
-          height: 100,
-          angle: 0,
-          classPrefix: "tr",
-          textIn: "Gallery",
-          textInBtn: "Gallery",
-          disableScale: false,
-          styles: {
-            background: "#fff",
-          }
-        })
-        }else{
-          this.bGallery = true
-        }
-      },
-      chackARBC(){
-        if(this.bContact == true){
-          this.bContact = false
-          this.elements.push({
-           id: "el-4",
-          x: 0,
-          y: 400,
-          scaleX: 1,
-          scaleY: 1,
-          width: 300,
-          height: 100,
-          angle: 0,
-          classPrefix: "tr",
-          textIn: "Contact",
-          textInBtn: "Contact",
-          disableScale: false,
-          styles: {
-            background: "#fff",
-          }
-        })
-        }else{
-          this.bContact = true
-        }
-      },
-      reset(){
-        this.elements = []
-      },
-      goPayment(){
-        this.$router.push( {name:'Payment',params: { imgResult: this.image}})
+      back(){
+        this.themeSelection = false
       }
     }
   }

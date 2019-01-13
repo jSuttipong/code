@@ -11,6 +11,7 @@ import Payment from '@/components/Payment'
 import Layout from '@/components/Layout'
 import ChackOrder from '@/components/ChackOrder'
 import Order from '@/components/Order'
+import OrderCreate from '@/components/OrderCreate'
 
 
 Vue.use(Router)
@@ -75,6 +76,12 @@ export default new Router({
       path: '/Order',
       name: 'Order',
       component: Order,
+      props: true
+    },
+    {
+      path: '/OrderCreate',
+      name: 'OrderCreate',
+      component: OrderCreate,
       props: true
     }
     

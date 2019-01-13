@@ -2,7 +2,7 @@
 <div >
     <b-container class="fontth">
     <h1 class="mt-5 mb-5">เลือกสินค้าของคุณ</h1>
-    <div v-for=" product in productList" :key="product" style="height:200px;width:300px" class="left mr-5">
+    <div v-for=" product in productList" :key="product.pName" style="height:200px;width:300px" class="left mr-5">
         <div class="">
           <router-link :to="product.pLink" ><img :src="product.pImg" style="width:300px; height:200px;position:relative;" class="mb-5 product-select item" v-b-tooltip.hover :title="product.pName">
           </router-link>
@@ -11,7 +11,7 @@
     </b-container>
     <div style="height:519px"></div>
     </div>
-</template>=
+</template>
 
 <script>
 /* eslint-disable */
