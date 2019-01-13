@@ -1,33 +1,5 @@
 <template>
   <div>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-      crossorigin="anonymous">
-    <b-navbar toggleable="md" type="dark" variant="info" style="box-shadow: 0px 1px 6px #888888; position:fixed;z-index:1; width:100%">
-      <b-container>
-        <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-        <b-navbar-brand href="#">
-          <img src="../assets/logo.png" height="50" width="auto" />
-        </b-navbar-brand>
-        <b-collapse is-nav id="nav_collapse">
-          <b-navbar-nav>
-            <b-nav-item href="#">Home</b-nav-item>
-            <b-nav-item href="#">Product</b-nav-item>
-            <b-nav-item href="#">Showcase</b-nav-item>
-            <b-nav-item href="#">About Us</b-nav-item>
-          </b-navbar-nav>
-          <!-- Right aligned nav items -->
-          <b-navbar-nav class="ml-auto">
-            <!-- {{this.$session.getAll()}} -->
-                <b-button v-if="this.$session.get('session')== true" @click="cSignout()" class="yr-button">Sign Out</b-button>
-                <router-link to="/Signin" v-else><b-button class="yr-button">Sign in</b-button></router-link>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-container>
-    </b-navbar>
-    <!-- navbar -->
-    <div style="height:76px; width:100%"></div>
-
-
     <!-- <div>
       <HomeContent/>
     </div> -->
@@ -100,8 +72,8 @@
           <b-col md="4">
             <i class="fas fa-expand-arrows-alt" v-b-modal.modal1></i>
             <img src="../assets/product/bookcover.png" style="width:auto; height:300px;">
-            <b-modal id="modal1">
-              <img src="../assets/product/bookcover.png" size="lg">
+            <b-modal id="modal1" class="center">
+              <img src="../assets/product/bookcover.png" style="width:400px" size="lg">
             </b-modal>
           </b-col>
         </b-row>
@@ -122,8 +94,6 @@
 
       </b-container>
     </div>
-
-
     <div class="fontth" style="height: auto">
       <b-container>
         <h1 class=" mt-5 center">ทดลองสแกน AR ได้ที่นี่</h1>
@@ -131,40 +101,6 @@
         <img src="../assets/arcard.png" style="width:auto; height:500px;" class="mt-5">
       </b-container>
     </div>
-    </div>
-    
-
-
-
-    <div class="footer fontth cwhite">
-      <b-container>
-        <b-row class="mt-5">
-          <b-col md="4">
-            <ul>
-            <li v-for="footerItem in footerItem " :key="footerItem.id" >
-              <a class="cwhite left" href="#" style="margin-right:20px ">{{footerItem.name}}</a>
-            </li>
-            </ul>
-            <br>
-            <p style="font-size:12px;"><i class="fas fa-copyright" style="font-size:12px; margin-top: 110px"></i>2018 Youry, All rights reserved.</p>
-          </b-col>
-          <b-col md="4">
-            <p>ติดต่อเรา</p>
-            <p>เลขที่ 80 ถนนป๊อปปูล่า ต.บ้านใหม่
-              อำเภอปากเกร็ด จังหวัดนนทบุรี 11120
-              โทรศัพท์ 091-765-9890
-              อีเมล์ customer@youry.com</p>
-          </b-col>
-          <b-col md="4">
-            <p >ติดตามข่าวสาร<a href=""><i class="fab fa-instagram" style="margin:0px 10px"></i ></a>
-            <a href=""><i class="fab fa-facebook" style="margin:0px 10px"></i></a>
-            <a href=""><i class="fab fa-twitter" style="margin:0px 10px"></i></a></p>
-            <br>
-            <b-form-input v-model="mailContact" type="text" placeholder="E-mail" class="email left"></b-form-input>
-            <b-button class="yr-button">ส่ง</b-button>
-          </b-col>
-        </b-row>
-      </b-container>
     </div>
   </div>
 
@@ -174,6 +110,7 @@
 import HomeContent from '@/components/HomeContent'
 // import {userChack} from '@/components/Signin'
   export default {
+    props: ["userData","userSignin"],
     name: 'Home',
     // props:['userChack'],
     data() {
@@ -266,19 +203,7 @@ import HomeContent from '@/components/HomeContent'
             text: '40'
           },
         ],
-        footerItem: [{
-            name: 'หน้าแรก'
-          },
-          {
-            name: 'สินค้า'
-          },
-          {
-            name: 'ราคา'
-          },
-          {
-            name: 'เกี่ยวกับเรา'
-          },
-        ]
+        
 
       }
     },

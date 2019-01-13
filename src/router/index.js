@@ -5,6 +5,14 @@ import Home from '@/components/Home'
 import HomeContent from '@/components/HomeContent'
 import Signin from '@/components/Signin'
 import Register from '@/components/Register'
+import Product from '@/components/Product'
+import Create from '@/components/Create'
+import Payment from '@/components/Payment'
+import Layout from '@/components/Layout'
+import ChackOrder from '@/components/ChackOrder'
+import Order from '@/components/Order'
+import OrderCreate from '@/components/OrderCreate'
+
 
 Vue.use(Router)
 const NotFound = { template: '<p>Page not found</p>' }
@@ -13,23 +21,70 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      props: true
     },
     {
       path: '/Home',
       name: 'HomeContent',
-      component: HomeContent
+      component: HomeContent,
+      props: true
     },
     {
       path: '/Signin',
       name: 'Signin',
-      component: Signin
+      component: Signin,
+      props: true
     },
     {
       path: '/Register',
       name: 'Register',
-      component: Register
+      component: Register,
+      props: true
+    },
+    {
+      path: '/Product',
+      name: 'Product',
+      component: Product,
+      props: true
+    },
+    {
+      path: '/Create',
+      name: 'Create',
+      component: Create,
+      props: true
+    },
+    {
+      path: '/Payment',
+      name: 'Payment',
+      component: Payment,
+      props: true
+    },
+    {
+      path: '/Layout',
+      name: 'Layout',
+      component: Layout,
+      props: true
+    },
+    {
+      path: '/ChackOrder:imgData',
+      name: 'ChackOrder',
+      component: ChackOrder,
+      props: true
+    },
+    {
+      path: '/Order',
+      name: 'Order',
+      component: Order,
+      props: true
+    },
+    {
+      path: '/OrderCreate',
+      name: 'OrderCreate',
+      component: OrderCreate,
+      props: true
     }
+    
   ]
 })
 // const routes = routerOptions.map(route => {

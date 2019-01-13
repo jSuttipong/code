@@ -7,8 +7,15 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 // import HomeContent from '@/component/HomeContent.vue'
 import VueSession from 'vue-session'
-Vue.use(VueSession)
+import FreeTransform from 'vue-free-transform'
+import { VueSpinners } from '@saeris/vue-spinners'
+import VueGoodTablePlugin from 'vue-good-table';
 
+
+Vue.use(VueSession)
+Vue.use(FreeTransform)
+Vue.use(VueSpinners)
+Vue.use(VueGoodTablePlugin);
 // CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
