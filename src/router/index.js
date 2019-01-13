@@ -17,6 +17,7 @@ import OrderCreate from '@/components/OrderCreate'
 Vue.use(Router)
 const NotFound = { template: '<p>Page not found</p>' }
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
@@ -83,7 +84,9 @@ export default new Router({
       name: 'OrderCreate',
       component: OrderCreate,
       props: true
-    }
+    },
+    { path: '*', redirect: '/' }
+    
     
   ]
 })
