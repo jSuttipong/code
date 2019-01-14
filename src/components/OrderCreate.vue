@@ -277,8 +277,11 @@ export default {
     },
     uploadImageSuccess(formData, index, fileList) {
       // var datalist = 0
+      console.log(this.gallery)
       // this.galleryData.push(formData,index);
       // datalist +=1
+      console.log('7777777777777777777'+formData)
+
        this.galleryData.push( [] );
       let num = parseInt(index)
       console.log(num)

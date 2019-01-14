@@ -22,15 +22,16 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
+      // redirect: 'Home',
       component: Home,
       props: true
     },
-    {
-      path: '/Home',
-      name: 'HomeContent',
-      component: HomeContent,
-      props: true
-    },
+    // {
+    //   path: '/Home',
+    //   name: 'HomeContent',
+    //   component: HomeContent,
+    //   props: true
+    // },
     {
       path: '/Signin',
       name: 'Signin',
