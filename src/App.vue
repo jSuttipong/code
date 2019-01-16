@@ -47,7 +47,7 @@
                     :is-full-page="true"></loading>
     </div>
     <router-view/>
-    <div class="footer fontth cwhite" style="bottom:0; position:relative; padding-top:1px">
+    <!-- <div class="footer fontth cwhite" style="bottom:0; position:relative; padding-top:1px">
       <b-container >
         <b-row class="mt-5" >
           <b-col md="4">
@@ -76,7 +76,7 @@
           </b-col>
         </b-row>
       </b-container>
-    </div>
+    </div> -->
   </div>
 </template>
 

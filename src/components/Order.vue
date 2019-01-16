@@ -28,16 +28,24 @@
         </div>
             </div>
             <!-- Modal Component -->
-            <b-modal v-model="showData" size="lg" centered title="รายการ">
-                <h3>Order ID : {{passData.orderId}}</h3>
-                <h5>ประเภท : {{passData.orderType}}</h5>
-                <h5>ราคา : {{passData.price}}</h5>
-                <h5>สถานะ : {{passData.status}}</h5>
-                <div v-for="item in imgData" :key="item">
+            <b-modal v-model="showData" size="lg" centered :title="'รายการที่ '+passData.orderId">
+                <div>
+                    <h5>ประเภท : {{passData.orderType}}</h5>
+                    <h5>ราคา : {{passData.price}}</h5>
+                    <h5>สถานะ : {{passData.status}}</h5>
+                </div>
+                <!-- <div v-for="item in imgData" :key="item">
                     <img :src="item.markerPath" alt="" class="left mr-3 ml-3 mt-3" style="width:200px;height:130px">
                     <video width="50%" controls>
                             <source :src="item.videoPath" type="video/mp4">
                           </video>
+                </div> -->
+                <div>
+                    <!-- {{imgData}} -->
+                    <img :src="passData.markerImg" alt="">
+                    <video width="50%" controls>
+                            <source :src="passData.video" type="video/mp4">
+                    </video>
                 </div>
                 <!-- {{passData}} -->
             </b-modal>
@@ -86,6 +94,7 @@ export default {
           field: 'status',
         },],
          rows: [],
+         allData: '',
       isLoading: false
         }
     },
@@ -128,13 +137,16 @@ export default {
             console.log(result)
             console.log(result.data)
             const data = result.data
+            this.allData = result.data
             console.log(data.length)
             for (var i = 0; i < data.length; i++) { 
                 this.rows.push({orderId:data[i].order_id,
             orderType:data[i].order_type,
             createdAt: data[i].order_date,
             price: data[i].order_price,
-            status: data[i].order_status})
+            status: data[i].order_status,
+            markerImg: data[i].marker.marker_img,
+            video: data[i].marker.marker_vdo})
             }
 
             // for (var i = 0; i < data.length; i++) { 
@@ -186,10 +198,10 @@ export default {
     },
     methods:{
         onRowClick(params) {
-            this.isLoading = true;
+            // this.isLoading = true;
             this.showData=true
             this.passData = params.row
-            this.imgData= []
+            // this.imgData= []
              var querystring = require('querystring');
         var chackEP = querystring.stringify({
           order_id: this.passData.orderId,
@@ -202,24 +214,24 @@ export default {
           }
         }
         // axios.post('http://fishyutt.xyz/dev/admin/files/api/users_api/order_user_detail.php', chackEP, config)
-          .then((result) => {
-            // console.log(result.data)
-            // this.imgData.push(result.data)
-            // console.log(this.imgData)
-            const data = result.data
-            // console.log(data)
-            for (var i = 0; i < data.length; i++) { 
-                this.imgData.push({markerPath:data[i].marker_img,
-                videoPath:data[i].marker_vdo,
-            })
-            }
-            // console.log(this.imgData)
-            this.isLoading = false
-          })
-          .catch((error) => {
-            console.log(error.response)
-            this.isLoading = false
-          })
+        //   .then((result) => {
+        //     // console.log(result.data)
+        //     // this.imgData.push(result.data)
+        //     // console.log(this.imgData)
+        //     const data = result.data
+        //     // console.log(data)
+        //     for (var i = 0; i < data.length; i++) { 
+        //         this.imgData.push({markerPath:data[i].marker_img,
+        //         videoPath:data[i].marker_vdo,
+        //     })
+        //     }
+        //     // console.log(this.imgData)
+        //     this.isLoading = false
+        //   })
+        //   .catch((error) => {
+        //     console.log(error.response)
+        //     this.isLoading = false
+        //   })
   },
     }
      }

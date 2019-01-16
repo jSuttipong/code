@@ -64,19 +64,19 @@
                 <b-button @click="removeVideo" class="yr-button mt-2 mb-2">Remove Video</b-button>
               </div>
               <h5 class="fontth">UPLOAD FILES GALLERY</h5>
-              <form ref="gallery">
+              <form ref="gallerys" enctype="multipart/form-data">
                 <!-- <label for="file-upload" class="button-upload mt-2">
                                         <h5 class="text-on-btn-upload"><i class="fas fa-upload"></i></h5>
                                     </label>
                 <input class="input-none " type="file" name="files" id="file-upload"  ref="file" multiple />-->
-                <!-- <label class="button-upload input-none">
+                <label class="button-upload input-none">
                   <h5 class="text-on-btn-upload">
                     <i class="fas fa-upload"></i>
                   </h5>
-                  <input type="file" multiple>
-                </label> -->
+                  <input type="file" name="gallerys[]" id="filesToUpload" @change="setDataGallerys" multiple="multiple">
+                </label>
               </form>
-              <div
+              <!-- <div
                 id="my-strictly-unique-vue-upload-multiple-image"
                 style="display: flex; justify-content: center;"
               >
@@ -95,7 +95,7 @@
                   name = 'gallerys'
                   id="gallery-upload"
                 ></vue-upload-multiple-image>
-              </div>
+              </div> -->
               <!-- <div v-for="img in gallery" :key="img">
                                 <img :src="img" alt="">
               </div>-->
@@ -166,6 +166,7 @@ export default {
       galleryData: [[]],
       markerData: '',
       gallery: [],
+      gallerys: [],
       userData: '',
       file : '',
       marker: '',
@@ -181,6 +182,31 @@ export default {
   methods: {
     hideModal () {
       this.$refs.modalCheckOrder.hide()
+    },
+    setDataGallerys(){
+      var input = document.getElementById('filesToUpload');
+      console.log(document.getElementById('filesToUpload').files)
+      // this.gallerys = document.getElementById('filesToUpload').files
+      // console.log('asdfghjkl'+this.gallerys)
+        // var list = document.getElementById('fileList');
+
+        //empty list for now...
+        // while (list.hasChildNodes()) {
+        //   list.removeChild(ul.firstChild);
+        // }
+
+//for every file...
+        for (var x = 0; x < input.files.length; x++) {
+          //add to list
+          // this.gallerys[x].push(document.getElementById('filesToUpload').files[x])
+          this.gallerys[x] = document.getElementById('filesToUpload').files[x]
+          // this.gallerys = document.getElementById('gallery').files[0]
+          console.log('data---'+this.gallerys)
+          // var li = document.createElement('li');
+          // li.innerHTML = 'File ' + (x + 1) + ':  ' + input.files[x].name;
+          // list.append(li);
+        }
+      // console.log('data---'+document.getElementById('gallerys'))
     },
     onFileChange(e) {
       // this.markerData = new FormData(this.$refs.marker);
@@ -371,7 +397,7 @@ export default {
             name_vdo: this.videoData,
             // marker_img: this.markerData,
             // marker_vdo: this.videoData,
-            // gallerys: this.galleryData
+            // gallerys: this.gallerys
 
         //   User_password: this.password,
         });
@@ -413,7 +439,7 @@ export default {
         theData.append('orther','none');
         theData.append('files',this.markerData);
         theData.append('vdo',this.videoData);
-        theData.append('gallerys',this.galleryData);
+        theData.append('gallerys[]',this.gallerys);
 
         const config = {
           headers: {
@@ -473,12 +499,12 @@ export default {
               .then((result) => {
               console.log(result)
               console.log('sccess')
-              this.$router.push( {name:'Order'})
+              // this.$router.push( {name:'Order'})
               this.isLoading = false
           })
           .catch((error) => {
             console.log('dataerror--------'+error)
-            // console.log('dataerror--------'+error.response)
+            console.log('dataerror--------'+error.response)
             this.isLoading = false
           })
     }

@@ -26,14 +26,10 @@ export default {
             pImg: require('../assets/product/card.png'),
             pLink: '/Create'
           },
-          // {
-          //   pName: 'NolmalPhoto',
-          //   pImg: require('../assets/product/normal.png'),
-          //   pLink: '/'
-          // },
+
           {
-            pName: 'Premium',
-            pImg: require('../assets/product/premium.jpeg'),
+            pName: 'Photobook',
+            pImg: require('../assets/product/photobook.jpg'),
             pLink: ''
           },]
     }

@@ -23,6 +23,9 @@ h1, h2, h3, h4, h5{
 .cred{
     color: #E53167;
 }
+.corange{
+    color: #ffa200
+}
 
 .cwhite{
     color: white;
@@ -61,7 +64,9 @@ h1, h2, h3, h4, h5{
 ul {
     list-style-type: none;
   }
-
+.pagebg{
+    /* background-image: url('../assets/bg/bg1.png'); */
+}
 .theme-select{
     width: 330px;
     height: 160px;
@@ -100,7 +105,7 @@ ul {
 
 .theme-banner{
     width: 100%;
-    height: 250px;
+    height: 150px;
     position: relative;
     z-index: 1;
     opacity: 0.5;
@@ -109,7 +114,7 @@ ul {
 
 .box-onbanner{
     width: 100%;
-    height: 250px;
+    height: 150px;
     background-color: #333;
     position: relative;
 }
@@ -122,13 +127,145 @@ ul {
     top: 0; right: 0;
 	bottom: 0; left: 0;
 	width: 100%;
-    height: 250px;
+    height: 150px;
 	text-align: center;
     /* vertical-align:middle; */
-    line-height:250px;
+    line-height:150px;
 }
 
+.box-example{
+    width: 100%;
+    height: 550px;
+    /* background-image: url('../assets/bg/bg2.png'); */
+    /* background-size: cover; */
+    background-color: #3b86cb;
+}
 
+.work-area{
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+    position: relative;
+}
+.theme-select{
+    width: 330px;
+    height: 160px;
+    margin: 0px !important;
+    float: left;
+    border-radius: 10px;
+    position: relative;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+.box-on{
+    width: 330px;
+    height: 160px;
+    margin: 20px 20px;
+    float: left;
+    border-radius: 10px;
+    background-color: #333;
+    position: relative;
+}
+
+.text-on-pic{
+    position: absolute;
+    opacity: 1 !important;
+    z-index: 2 ;
+    vertical-align:middle;
+    top: 0; right: 0;
+	bottom: 0; left: 0;
+	width: 330px;
+    height: 160px;
+	text-align: center;
+    /* vertical-align:middle; */
+    line-height:160px;
+    cursor:pointer !important;
+}
+
+.layout-selected{
+    display: block;
+    width: 200px;
+    height: 250px;
+    border: solid 2px #b7b7b7;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+}
+.box-on-layout {
+    position: relative;
+    width: 200px;
+    margin: 10px;
+    height: 250px;
+    float: left;
+    cursor: pointer;
+  }
+  .box-on-layout:hover .overlay {
+    opacity: 0.7;
+  }
+
+/* .box-on-layout{
+    width: 200px;
+    height: 250px;
+    margin: 10px;
+    float: left;
+    border-radius: 10px;
+    z-index: 3 !important;
+    position: relative;
+}
+.box-on-layout:hover{
+    background-color: #333;
+    opacity: 1 !important;
+} */
+.layout-on {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ease;
+    background-color: #333;
+    float: left;
+    border-radius: 5px;
+  }
+
+.text-on-layout {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+.layoutactive{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.7;
+    background-color: #333;
+    float: left;
+    border-radius: 5px;
+}
+
+.layout-area{
+    width: 100%;
+    height: 350px;   
+}
+
+.dropdown-bnt{
+    width: 100%;
+}
 /* .upload-input{
     width: 300px;
     height: 300px;
@@ -139,6 +276,10 @@ ul {
     display: inline-block;
     padding: 6px 12px;
     cursor: pointer;
+}
+.inputData-area{
+    width: 100%;
+    height: auto;
 }
 /* input[type="file"] {
     display: none;
