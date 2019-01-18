@@ -12,6 +12,7 @@ import Layout from '@/components/Layout'
 import ChackOrder from '@/components/ChackOrder'
 import Order from '@/components/Order'
 import OrderCreate from '@/components/OrderCreate'
+import OrderBill from '@/components/OrderBill'
 
 
 Vue.use(Router)
@@ -83,6 +84,12 @@ export default new Router({
       path: '/OrderCreate',
       name: 'OrderCreate',
       component: OrderCreate,
+      props: true
+    },
+    {
+      path: '/OrderBill',
+      name: 'OrderBill',
+      component: OrderBill,
       props: true
     },
     { path: '*', redirect: '/' }

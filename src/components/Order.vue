@@ -43,9 +43,13 @@
                 <div>
                     <!-- {{imgData}} -->
                     <img :src="passData.markerImg" alt="">
-                    <video width="50%" controls>
+                    <!-- <video width="50%" controls>
                             <source :src="passData.video" type="video/mp4">
-                    </video>
+                    </video> -->
+                    <!-- {{passData.status}} -->
+                    <div v-if="passData.status == 'ยังไม่ชำระเงิน'">
+                        <b-button class="yr-button" @click="goPayment()">ชำระเงิน</b-button>
+                    </div>
                 </div>
                 <!-- {{passData}} -->
             </b-modal>
@@ -76,13 +80,14 @@ export default {
         {
           label: 'รายการ',
           field: 'orderType',
+          sortable: false,
         },
         {
           label: 'Created On',
           field: 'createdAt',
           type: 'date',
-          dateInputFormat: 'YYYY-MM-DD h:mm:ss7',
-          dateOutputFormat: 'DD MMM YYYY h:mm:ss',
+          dateInputFormat: 'YYYY-MM-DD',
+          dateOutputFormat: 'DD MMM YYYY',
         },
         {
           label: 'ราคา',
@@ -100,14 +105,12 @@ export default {
     },
     mounted(){
         this.isLoading = true;
-    //    const getUserData = this.$session.get('sessionData')
-    //    this.userData = getUserData[0]
-    //    console.log('--------'+this.$session.get('sessionData'))
+       const getUserData = this.$session.get('sessionData')
+       this.userData = getUserData[0]
         var querystring = require('querystring');
         var chackEP = querystring.stringify({
-            user_id: '4'
-        //   user_id: this.userData.User_id,
-        //   User_password: this.password,
+            user_id: this.userData.user_id
+
         });
 
         const config = {
@@ -115,12 +118,12 @@ export default {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
-        var theData = new FormData();
-        theData.append('user_id','4');
-        var rawData = {
-            user_id: '4',
-        }
-        rawData = JSON.stringify(rawData) 
+        // var theData = new FormData();
+        // theData.append('user_id','4');
+        // var rawData = {
+        //     user_id: 'this.userData',
+        // }
+        // rawData = JSON.stringify(rawData) 
         // axios({
         //           method: 'post',
         //           url: 'http://fishyutt.xyz/dev/admin/files/api/users_api/order_user_detail.php',
@@ -134,7 +137,7 @@ export default {
 //     }
 //   })
           .then((result) => {
-            console.log(result)
+           
             console.log(result.data)
             const data = result.data
             this.allData = result.data
@@ -144,10 +147,11 @@ export default {
             orderType:data[i].order_type,
             createdAt: data[i].order_date,
             price: data[i].order_price,
-            status: data[i].order_status,
-            markerImg: data[i].marker.marker_img,
-            video: data[i].marker.marker_vdo})
+            status: data[i].order_status,})
             }
+            
+            // markerImg: data[i].marker.marker_img,
+            // video: data[i].marker.marker_vdo
 
             // for (var i = 0; i < data.length; i++) { 
             //     this.imgData.push({markerPath:data[i].marker.marker_img,
@@ -167,20 +171,21 @@ export default {
                 }else this.rows[i].orderType = "การ์ด";
             }
             for (var i = 0; i < data.length; i++) { 
-                if(this.rows[i].status == 0){
-                    this.rows[i].status = "ยังไม่จ่ายเงิน"
-                }else if(this.rows[i].status == 1){
-                    this.rows[i].status = "จ่ายเงินแล้ว"
+                if(this.rows[i].status == 1){
+                    this.rows[i].status = "ยังไม่ชำระเงิน"
                 }else if(this.rows[i].status == 2){
-                    this.rows[i].status = "กำลังดำเนินการ"
+                    this.rows[i].status = "ชำระเงินแล้ว"
+                }else if(this.rows[i].status == 3){
+                    this.rows[i].status = "อยู่ในระหว่างดำเนินการ"
                 }else this.rows[i].status = "เสร็จสิ้น"
             }
             
-            // for (var i = 0; i < data.length; i++) { 
-            //     var c = numeral(this.rows[i].price).format('0,0')
-            //     this.rows[i].price = c
+            for (var i = 0; i < data.length; i++) { 
+                var c = numeral(this.rows[i].price).format('0,0')
+                 this.rows[i].price = c
+                // return c
                 
-            // }
+            }
         // if(this.rows.orderType == 0){
         //     return 'โฟโต้บุ๊ค'
         // }else return 'การ์ด';
@@ -233,6 +238,9 @@ export default {
         //     this.isLoading = false
         //   })
   },
+  goPayment(){
+      this.$router.push( {name:'Payment',params: { orderId: this.passData.orderId}})
+  }
     }
      }
 </script>

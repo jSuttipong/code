@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="background-home">
     <!-- <div>
       <HomeContent/>
     </div> -->
-    <div>
+    <div >
   <b-row>
       <b-col md="1">
       </b-col>
@@ -223,8 +223,12 @@ import HomeContent from '@/components/HomeContent'
 <style>
   @import '../assets/Style.css';
 
-  body {
+  /* body {
     background-image: url("../assets/bg.png")
+  } */
+  .background-home{
+    background-image: url("../assets/bg.png");
+    background-repeat: no-repeat;
   }
 
   .f-left {

@@ -12,7 +12,8 @@
             <h5>CVV *ด้านหลังของบัตร</h5>
             <b-form-input v-model="cvv"></b-form-input>
             </b-input-group> -->
-        <b-card text-variant="black" header="ข้อมูลบัตรเครดิต/เดบิต" class="text-center signin-group " style="width:50%">
+        <!-- <div class="center">ชำระเงิน {{orderId}}</div> -->
+        <b-card text-variant="black" :header="'ชำระเงิน '+orderId" class="text-center signin-group " style="width:50%">
         <p class="left mb-1" style="font-size:14px">ธนาคาร</p>
         <b-form-input v-model="bankName" type="text" placeholder="krungthai bank" class="signin-input mb-3"></b-form-input>
         <p class="left mb-1" style="font-size:14px">ชื่อบนบัตร</p>
@@ -33,17 +34,16 @@
         </div>
         <!-- <bar-loader class="custom-class" :loading="loading" :size="150" :sizeUnit="px"></bar-loader> -->
         <!-- <b-button class="yr-button" @click="cLogout()" type="submit">Sign Out</b-button> -->
-      </b-card>
-        <!-- {{imgResult}} -->
         <div class="mt-4">
         <b-button class="yr-button"  v-b-modal.checkC>ยืนยัน</b-button>
         <b-button class="yr-button" style="background-color:#999; border:none" @click="cancer()">ยกเลิก</b-button>
         </div>
+      </b-card>
         </b-container>
 
         <b-modal id="checkC" ref="myModalRef" hide-footer title="ยืนยันการจ่ายเงิน" >
                   <p class="my-4 cred">ยืนยัน</p>
-                  <b-button @click="createOrder()" class="yr-button">ตกลง</b-button>
+                  <b-button @click="payment()" class="yr-button">ตกลง</b-button>
                   <b-button class="yr-button mr-3" @click="hideModal" style="background-color:#999; border:none">ยกเลิก</b-button>
         </b-modal>
     </div>
@@ -53,7 +53,7 @@
 import Loading from 'vue-loading-overlay';
 const axios = require('axios');
     export default {
-    props:["imgResult"],
+    props:["orderId"],
       components: {
             Loading
         },
@@ -62,36 +62,37 @@ const axios = require('axios');
       return{
           isLoading: false,
           bankName: '',
-          nameOnCard: '',
-          bankNumber: '',
-          cardDate: '',
+          nameOnCard: 'Suttipong Senasuttiphan',
+          bankNumber: '1234456789123456',
+          cardDate: '08/20',
           cvv: '789',
       }
   },
   methods:{
-      createOrder(){
-        this.isLoading = true;
-         var querystring = require('querystring');
-        var c = this.$session.get('sessionData')
-        var chackEP = querystring.stringify({
-          user_id: c[0].User_id,
-        });
-
-        const config = {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }
-        
-        axios.post('http://fishyutt.xyz/api/youry/insert_order.php', chackEP, config)
-          .then((result) => {
-           console.log(result)
-           this.$router.push( {name:'Order'})
-            this.isLoading = false;
+      payment(){
+        this.$refs.myModalRef.hide()
+        this.isLoading = true
+        var theData = new FormData();
+        theData.append('order_id',this.orderId);
+        theData.append('payment_name',this.nameOnCard);
+        theData.append('payment_card',this.bankName);
+        theData.append('payment_date',this.cardDate);
+        theData.append('payment_cvv',this.cvv);
+        axios({
+                  method: 'post',
+                  url: 'http://fishyutt.xyz/dev/admin/files/api/orders_api/update_order_payment.php',
+                  data: theData,
+                  config: { headers: {'Content-Type': 'multipart/form-data' }}
+              })
+              .then((result) => {
+              console.log(result)
+              console.log('sccess')
+              this.$router.push( {name:'Order'})
+              this.isLoading = false
           })
           .catch((error) => {
-            console.log(error.response)
-            this.isLoading = false;
+            console.log('dataerror--------'+error)
+            this.isLoading = false
           })
       },
       cancer(){
