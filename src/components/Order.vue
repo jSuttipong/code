@@ -9,7 +9,8 @@
                 <vue-good-table
                 :columns="columns"
                 :search-options="{
-                    enabled: true
+                    enabled: true,
+                    initialSortBy: {field: 'orderId',type: 'asc'}
                 }"
                 :pagination-options="{
                     enabled: true,
@@ -58,16 +59,21 @@
                     <b-row>
                         <b-col>
                             <h5>รูป marker</h5>
-                            <img :src="imgUrl" style="width:60%">
+                            <img :src="imgUrl" style="width:60%box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);border: 1px solid rgba(0, 0, 0, 0.10);">
                         </b-col>
                         <b-col>
-                            <h5>Video บนการ์ด</h5>
-                            {{vdoUrl}}
-                            <video width="100%" controls>
-                            <source :src="vdoUrl" type="video/mp4">
-                            </video>
+                            <h5 class="mb-5">Video บนการ์ด</h5>
+                            <iframe width="100%" height='200px' controls
+                            :src="vdoUrl">
+                            </iframe>
                         </b-col>
                     </b-row>
+                    <div>
+                        <h5 class="mt-3">รูป Gallery</h5>
+                        <div v-for="galleriesData in passData.galleries" :key='galleriesData.gallery_url'>
+                            <img :src="galleriesData.gallery_url" class="left" style="width:20%;margin: 5px">
+                        </div>
+                    </div>
                 </b-container>
                 <!-- <div>
                     <h5>ประเภท : {{passData.orderType}}</h5>
@@ -114,6 +120,7 @@ export default {
             userData: '',
             textAlert: '',
             imgData: [],
+            galleryData: [],
              columns: [
         {
           label: 'Order ID',
@@ -128,7 +135,7 @@ export default {
           label: 'Created On',
           field: 'createdAt',
           type: 'date',
-          dateInputFormat: 'YYYY-MM-DD',
+          dateInputFormat: 'YYYY-MM-DD ',
           dateOutputFormat: 'DD MMM YYYY',
         },
         {
@@ -180,7 +187,6 @@ export default {
 //     }
 //   })
           .then((result) => {
-            
                 console.log(result)
                 const data = result.data
                 this.allData = result.data
@@ -196,21 +202,6 @@ export default {
                 marker: data[i].marker})
                 }
             
-            // markerImg: data[i].marker.marker_img,
-            // video: data[i].marker.marker_vdo
-
-            // for (var i = 0; i < data.length; i++) { 
-            //     this.imgData.push({markerPath:data[i].marker.marker_img,
-            //     videoPath:data[i].marker.marker_vdo,
-            // })
-            // }
-            // console.log(this.rows)
-
-            // console.log(this.rows)
-            // console.log(this.rows[0].orderType)
-            // if(){
-
-            // }
              for (var i = 0; i < data.length; i++) { 
                 if(this.rows[i].orderType == 0){
                     this.rows[i].orderType = "โฟโต้บุ๊ค"
@@ -256,6 +247,10 @@ export default {
             this.passData = params.row
             this.imgUrl = this.passData.marker.marker_img
             this.vdoUrl = this.passData.marker.marker_vdo
+             console.log(this.passData.galleries)
+            // for (let index = 0; index < this.passData.length; index++) {
+            //     this.galleryData.push(this.passData[index].galleries)   
+            // }
             // console.log('5555'+this.passData.marker)
             moment.locale('th')
             this.dateShow = moment(this.passData.createdAt).format("D MMMM YYYY")

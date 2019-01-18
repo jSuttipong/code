@@ -1,6 +1,6 @@
 <template>
     <div class="fontth">
-        <b-container class="wapper-order-bill">
+        <b-container class="wapper-order-bill" style="height: 1200px">
             <div >
                 <h2 class="pt-4 mb-4 center" >ข้อมูลการสั่งทำ</h2>
                 <div>
@@ -62,6 +62,7 @@
 <script>
 /* eslint-disable */
 const moment = require('moment');
+var numeral = require('numeral');
 import Loading from 'vue-loading-overlay';
 export default {
   props: ["orderData"],
@@ -84,6 +85,7 @@ export default {
        this.orderDataShow = this.orderData[0]
        moment.locale('th')
        this.orderDate = moment(this.orderDataShow.order_date).format("D MMMM YYYY")
+       this.orderDataShow.order_price = numeral(orderDataShow.order_price).format('0,0')
         // console.log(this.orderDataShow.order_status.length)
                 if(this.orderDataShow.order_status == 1){
                     this.orderStatus = "ยังไม่ชำระเงิน"
@@ -96,7 +98,28 @@ export default {
                 }
         if( this.orderDataShow.order_type == 0){
                     this.orderType = "โฟโต้บุ๊ค"
-                }else this.orderType = "การ์ด";        
+                }else this.orderType = "การ์ด";   
+                
+
+        var querystring = require('querystring');
+        var chackEP = querystring.stringify({
+            order_id: this.orderDataShow.order_id
+
+        });
+
+        const config = {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+        axios.post('http://fishyutt.xyz/dev/admin/files/api/orders_api/query_gallery.php', chackEP, config)
+          .then((result) => {
+              console.log(result)
+          }).catch((error) => {
+            console.log(error.response)
+            this.isLoading = false
+          })
+
       },
     methods:{
         goPayment(){
