@@ -19,26 +19,49 @@
                             </b-col>
                             <b-col>
                                 <div class="bot-border mb-2"><h5>วันที่สั่งทำ</h5></div>
-                                <p>{{orderDataShow.order_date}}</p>
+                                <p>{{orderDate}}</p>
+                                <br>
+                                <div class="bot-border mb-2"><h5>ชนิด</h5></div>
+                                <p>{{this.orderType}}</p>
                             </b-col>
                             <b-col>
                                 <div class="bot-border mb-2"><h5>สถานะ</h5></div>
-                                <p>{{orderDataShow.order_status}}</p>
+                                <p class="cred">{{orderStatus}}</p>
                             </b-col>
                         </b-row>
+                         <div class="right" style="">
+                    <b-button class="yr-button ml-3" @click="goPayment()">ชำระเงิน</b-button>
+                    <b-button class="yr-button bgblack" @click="close()">ปิด</b-button>
+                    </div>
                         </b-col>
                     </b-row>
-                    <div class="right">
-                    <b-button class="yr-button ml-3" @click="goPayment()">ชำระเงิน</b-button>
-                    <b-button class="yr-button" @click="close()">ปิด</b-button>
-                    </div>
                 </div>
+                <h2 class="pt-4 mb-4 center">รายละเอียดการ์ด</h2>
+                <b-row>
+                    <b-col>
+                    <div class="bot-border mb-3"><h5>วีดีโอ</h5></div>
+                    <video width="100%" controls>
+                      <source :src="this.orderDataShow.url_vdo" type="video/mp4">
+                    </video>
+                    </b-col>
+                    <b-col>
+                        <div v-if="this.orderDataShow.contact != ''">
+                            <div class="bot-border mb-3"><h5>Contact</h5></div>
+                            <p>{{this.orderDataShow.contact}}</p>
+                        </div>
+                        <div v-if="this.orderDataShow.location != ''">
+                            <div class="bot-border mb-3"><h5>Location</h5></div>
+                            <p>{{this.orderDataShow.location}}</p>
+                        </div>
+                    </b-col>
+                </b-row>
             </div>
         </b-container>
     </div>
 </template>
 <script>
 /* eslint-disable */
+const moment = require('moment');
 import Loading from 'vue-loading-overlay';
 export default {
   props: ["orderData"],
@@ -49,13 +72,31 @@ export default {
       return{
           isLoading: false,
           orderDataShow: '',
-          userData:''
+          userData:'',
+          orderStatus: '',
+          orderDate: '',
+          orderType: ''
       }
   },
    mounted(){
        const getUserData = this.$session.get('sessionData')
         this.userData = getUserData[0]
-       this.orderDataShow = this.orderData[0]   
+       this.orderDataShow = this.orderData[0]
+       moment.locale('th')
+       this.orderDate = moment(this.orderDataShow.order_date).format("D MMMM YYYY")
+        // console.log(this.orderDataShow.order_status.length)
+                if(this.orderDataShow.order_status == 1){
+                    this.orderStatus = "ยังไม่ชำระเงิน"
+                }else if(this.orderDataShow.order_status == 2){
+                    this.orderStatus = "ชำระเงินแล้ว"
+                }else if(this.orderDataShow.order_status == 3){
+                    this.orderStatus = "อยู่ในระหว่างดำเนินการ"
+                }else if(this.orderDataShow.order_status == 4){
+                this.orderStatus = "เสร็จสิ้น"
+                }
+        if( this.orderDataShow.order_type == 0){
+                    this.orderType = "โฟโต้บุ๊ค"
+                }else this.orderType = "การ์ด";        
       },
     methods:{
         goPayment(){

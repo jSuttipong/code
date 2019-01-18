@@ -70,7 +70,8 @@
                     >
                     </form>
                     </div>
-              <b-row v-else>
+              <div v-else>
+              <b-row >
                 <b-col>
                     <div >
                       <img :src="image" class="image-show" style="display: flex; justify-content: center;">
@@ -97,7 +98,7 @@
                         >
                       </form>
                     </div>
-                    <div v-else>
+                    <div v-else class="mb-5">
                     <video width="100%" controls>
                       <source :src="video" type="video/mp4">
                     </video>
@@ -114,21 +115,21 @@
                       <div>
                         <h5 class="mb-2">Location</h5>
                         <b-form-input class="mb-2" v-model="locationBtn" type="text" placeholder="Location ของคุณ"></b-form-input>
-                           <GmapMap
+                           <!-- <GmapMap
                             :center="currentLocation"
                             :zoom="17"
                             map-type-id="terrain"
                             id="mapId"
                             style="width: 500px; height: 300px"
-                          >
+                          > -->
                           <!-- <GmapMarker ref="mapMarker" :position="google && new google.maps.LatLng(13.923633 , 100.536543)"/> -->
-                          <GmapMarker ref="myMarker"
-                         :position="google && new google.maps.LatLng(13.923633, 100.536543)"/>
+                          <!-- <GmapMarker ref="myMarker"
+                         :position="google && new google.maps.LatLng(13.923633, 100.536543)"/> -->
                             <!-- <GmapMarker
                               :clickable="true"
                               :draggable="true"
                             /> -->
-                          </GmapMap>
+                          <!-- </GmapMap> -->
                           <!-- <div class="geolocation" v-on:click="geolocation()">
                             <img src="../../static/images/geolocation.png" />
                           </div> -->
@@ -155,15 +156,27 @@
                           </label>
                         </form>
                       </div>
-                      <div>
-                        <b-button class="yr-button right ml-3" @click="checkInputData()">สั่งทำ</b-button>
-                        <!-- <b-button class="yr-button right">ยกเลิก</b-button> -->
-                      </div>
                     </div>
                   </div>
                   </div>
                 </b-col>
               </b-row>
+              <b-container>
+                  <div class="mb-3">
+                        <h5>ข้อมูลความต้องการของคุณ</h5>
+                        <b-form-textarea id="textarea1"
+                     v-model="commentsData"
+                     placeholder="ข้อมูลความต้องการของคุณ เช่น ต้องการปุ่มแบบไหน รูปทรงของปุ่ม (ใส่ข้อมูลหรือไม่ใส่ก็ได้)"
+                     :rows="3"
+                     :max-rows="6">
+                    </b-form-textarea>
+                  </div>
+                <div>
+                  <b-button class="yr-button right" @click="checkInputData()">สั่งทำ</b-button>
+                        <!-- <b-button class="yr-button right">ยกเลิก</b-button> -->
+                  </div>
+              </b-container>
+              </div>
             </div>
           </div>
 
@@ -174,19 +187,23 @@
       <div>
         <b-row>
           <b-col>
-            <h4>Marker</h4>
-            <img class="check-img" :src="image">
-            <!-- <h4>Layout ที่เลือก</h4>
-            <img class="check-layout" :src="layoutImgData" alt=""> -->
+            <div class="bot-border mb-2"><h5>ราคาสร้างสรรค์งาน</h5></div>
+            <p>{{defaultPriceFormat}} บาท</p>
+            <div class="bot-border mb-2"><h5>รวม</h5></div>
+            <p>{{allPrice}} บาท</p>
           </b-col>
           <b-col>
-            <video width="100%" controls>
-              <source :src="video" type="video/mp4">
-            </video>
-            <b-button class="yr-button right" @click="createOrder()">ยืนยัน</b-button>
-            <b-button class="yr-button right" @click="cancel()">ยกเลิก</b-button>
+            <div class="bot-border mb-2"><h5>ราคาต่อปุ่ม</h5></div>
+            <p>{{cardBntPrice}} บาท</p>
+          </b-col>
+          <b-col>
+            <div class="bot-border mb-2"><h5>จำนวนปุ่ม</h5></div>
+            <p>{{countBtn}} ปุ่ม</p>
           </b-col>
         </b-row>
+        <p class="cred">*หมายเหตุ งานจะเริ่มดำเนินต่อเมื่อชำระเงินเสร็จสิ้น</p>
+        <b-button class="yr-button right ml-3" @click="createOrder()">ยืนยัน</b-button>
+        <b-button class="yr-button right bgblack" @click="cancel()">ยกเลิก</b-button>
       </div>
       </b-modal>
        <b-modal ref="CheckLogin" hide-footer title="กรุณาเข้าสู่ระบบ" size="lg">
@@ -209,10 +226,12 @@
 </template>
 <script >
 /* eslint-disable */
+
 import Signin from '@/components/Signin'
 import Loading from 'vue-loading-overlay';
 import FreeTransform from 'vue-free-transform'
 import {gmapApi} from 'vue2-google-maps'
+var numeral = require('numeral');
 const axios = require('axios');
   export default {
     props: ["Layouts"],
@@ -228,6 +247,7 @@ const axios = require('axios');
         searchAddressInput: '',
         cardBntPrice: 500,
         defaultPrice: 2000,
+        defaultPriceFormat: '',
         active: '1',
         countBtn: '1',
         btnCard: null,
@@ -240,13 +260,16 @@ const axios = require('axios');
         locationBtn: '',
         ShareBtn: '',
         video: '',
+        video2: '',
+        allPrice: '',
         videoData: '',
         markerData: '',
         gallerys: [],
         userData: '',
         slide: 0,
-      sliding: null,
+        sliding: null,
         file : '',
+        commentsData: '',
         layoutImgData: require('../assets/layout/lv2_1.png'),
         themeSelection: false,
         selecttionItem: null,
@@ -479,6 +502,13 @@ const axios = require('axios');
       },
       checkInputData(){
       if(this.$session.get('session') == true){
+        this.cardBntPrice = parseInt(this.cardBntPrice)
+        this.allPrice = this.cardBntPrice+this.defaultPrice
+        console.log(this.allPrice)
+        var c = numeral(this.allPrice).format('0,0')
+        var d = numeral(this.defaultPrice).format('0,0')
+        this.allPrice = c
+        this.defaultPriceFormat = d
         this.$refs.CheckData.show()
         }else{
         this.isLoading = false
@@ -490,18 +520,17 @@ const axios = require('axios');
       },
     createOrder(){
       // var userData = this.$session.getAll()
-
       this.$refs.CheckData.hide()
         this.isLoading = true
-        var allPrice = this.cardBntPrice+this.defaultPrice
         const getUserData = this.$session.get('sessionData')
+        this.allPrice = this.cardBntPrice+this.defaultPrice
         this.userData = getUserData[0]
         var theData = new FormData();
         theData.append('user_id',this.userData.user_id);
         theData.append('layout_id',this.countBtn);
         theData.append('location',this.locationBtn);
         theData.append('contact',this.contactBtn);
-        theData.append('price',allPrice);
+        theData.append('price',this.allPrice);
         theData.append('orther','none');
         theData.append('files',this.markerData);
         theData.append('vdo',this.videoData);

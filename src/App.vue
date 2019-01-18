@@ -21,7 +21,7 @@
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
             <!-- {{this.$session.getAll()}} -->
-                <router-link to="/Order"><b-button v-if="this.$session.get('session')== true" class="yr-button mr-2 bt-order">Order</b-button></router-link>
+                <router-link to="/Order"><b-button v-if="this.$session.get('session')== true" class="yr-button mr-2 bgblue">Order</b-button></router-link>
                 <b-button v-if="this.$session.get('session')== true"  v-b-modal.checkSignOut class="yr-button">Sign Out</b-button>
                 <router-link to="/Signin" v-else><b-button class="yr-button">Sign in</b-button></router-link>
                 <div>
@@ -46,8 +46,10 @@
                     backgroundColor= '#ffffff'
                     :is-full-page="true"></loading>
     </div>
-    <router-view/>
-    <!-- <div class="footer fontth cwhite" style="bottom:0; position:relative; padding-top:1px">
+    <div style="position:relative;min-height:620px">
+      <router-view/>
+    </div>
+    <div class="footer fontth cwhite" style="bottom:0; position:relative; padding-top:1px">
       <b-container >
         <b-row class="mt-5" >
           <b-col md="4">
@@ -72,11 +74,11 @@
             <a href=""><i class="fab fa-twitter" style="margin:0px 10px"></i></a></p>
             <br>
             <b-form-input v-model="mailContact" type="text" placeholder="E-mail" class="email left"></b-form-input>
-            <b-button class="yr-button">ส่ง</b-button>
+            <b-button class="yr-button mt-3">ส่ง</b-button>
           </b-col>
         </b-row>
       </b-container>
-    </div> -->
+    </div>
   </div>
 </template>
 

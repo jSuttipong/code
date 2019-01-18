@@ -42,7 +42,7 @@
     </b-row>
     <div class="fontth mt-5 ">
       <b-container>
-        <h1 class="center mb-3">สินค้าแนะนำ</h1>
+        <!-- <h1 class="center mb-3">สินค้าแนะนำ</h1>
         <b-row>
           <b-col md="3">
             <div v-for="item in productList" :key="item.id">
@@ -76,7 +76,7 @@
               <img src="../assets/product/bookcover.png" style="width:400px" size="lg">
             </b-modal>
           </b-col>
-        </b-row>
+        </b-row> -->
       </b-container>
     </div>
     <b-container>
@@ -97,8 +97,31 @@
     <div class="fontth" style="height: auto">
       <b-container>
         <h1 class=" mt-5 center">ทดลองสแกน AR ได้ที่นี่</h1>
-        <img src="../assets/arcover.jpg" style="width:auto; height:350px;" class="mt-5">
-        <img src="../assets/arcard.png" style="width:auto; height:500px;" class="mt-5">
+        <b-row>
+          <b-col>
+            <h2 class="mt-5">ตัวอย่าง AR Cover Book</h2>
+            <p class="fs24">เปลี่ยนหนังสือของคุณ ไม่ให้หยุดแค่ภาพนิ่ง
+            คุณสามารถเลือกที่สร้าง AR เหมาะสมกับ
+            ความต้องการของคุณ ทั้งการให้เล่นวีดีโอ
+            หรือการทำให้มีมิติมากขึ้น</p>
+          </b-col>
+          <b-col>
+            <img src="../assets/arcover.jpg" style="width:auto; height:350px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+    border: 1px solid rgba(0, 0, 0, 0.10);" class="mt-5">
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <img src="../assets/arcard.png" style="width:auto; height:500px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+    border: 1px solid rgba(0, 0, 0, 0.10);" class="mt-5">
+          </b-col>
+          <b-col>
+            <h2 class="mt-5">ตัวอย่าง Card</h2>
+            <p class="fs24">ทำการเชิญของคุณให้สามารถบอกตำแหน่งที่จัดงานของคุณได้โดยที่
+          ไม่ต้องค้นหาด้วยตัวเอง เพิ่มรายละเอียดของงานและ
+          พรีเซนในแบบของคุณ</p>
+          </b-col>
+        </b-row>
       </b-container>
     </div>
     </div>
@@ -136,15 +159,15 @@ import HomeContent from '@/components/HomeContent'
             iconFlow: require('../assets/flowicon/icon4.png'),
             nameFlow: 'ชำระเงิน'
           },
-          {
-            numFlow: '5',
-            iconFlow: require('../assets/flowicon/icon5.png'),
-            nameFlow: 'ดูต้นแบบและสั่งปรับแก้'
-          },
+          // {
+          //   numFlow: '5',
+          //   iconFlow: require('../assets/flowicon/icon5.png'),
+          //   nameFlow: 'ดูต้นแบบและสั่งปรับแก้'
+          // },
           {
             numFlow: '6',
             iconFlow: require('../assets/flowicon/icon6.png'),
-            nameFlow: 'รอรับสินค้า'
+            nameFlow: 'รอดำเนินงานจนเสร็จสิ้น'
           },
         ],
         productList: [{

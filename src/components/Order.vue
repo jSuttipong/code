@@ -3,8 +3,8 @@
         <b-container>
             <div class="order-space fontth mb-5">
                 <h1 class="center mt-5">Your Order</h1>
-                <div class="textName">คุณ {{userData.fname}} {{userData.lname}}</div>
-                <div><p>เบอร์โทร : {{userData.mobile}}</p></div>
+                <div class="textName">คุณ {{userData.user_fname}} {{userData.user_lname}}</div>
+                <div><p>เบอร์โทร : {{userData.user_mobile}}</p></div>
                 <div style="width:100%;height:50px"><b-button class="yr-button order-btn">Order ทั้งหมด</b-button></div>
                 <vue-good-table
                 :columns="columns"
@@ -17,7 +17,11 @@
                     perPageDropdown: [5, 10],
                 }"
                 @on-row-click="onRowClick"
-                :rows="rows"/>
+                :rows="rows">
+                <div slot="emptystate">
+                    ยังไม่มีข้อมูล
+                </div>
+                </vue-good-table>
                 <div class="vld-parent">
         <loading :active.sync="isLoading"
         :can-cancel="false"
@@ -28,12 +32,48 @@
         </div>
             </div>
             <!-- Modal Component -->
-            <b-modal v-model="showData" size="lg" centered :title="'รายการที่ '+passData.orderId">
-                <div>
+            <b-modal v-model="showData" size="lg" centered :title="'รายการที่ '+passData.orderId" class="fontth">
+                <b-container>
+                    <b-row>
+                        <b-col>
+                            <div class="bot-border mb-2"><h5>ประเภท</h5></div>
+                            <p>{{passData.orderType}}</p>
+                            <div class="bot-border mb-2"><h5>วันที่สร้าง</h5></div>
+                            <p>{{dateShow}}</p>
+                        </b-col>
+                        <b-col>
+                            <div class="bot-border mb-2"><h5>ราคา</h5></div>
+                            <p>{{passData.price}}</p>
+                        </b-col>
+                        <b-col>
+                            <div class="bot-border mb-2"><h5>สถานะ</h5></div>
+                            <p>{{passData.status}}</p>
+                            <!-- this.passData -->
+                            <!-- {{passData.marker.marker_img}} -->
+                            <div v-if="passData.status == 'ยังไม่ชำระเงิน'">
+                        <b-button class="yr-button right" @click="goPayment()">ชำระเงิน</b-button>
+                    </div>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <h5>รูป marker</h5>
+                            <img :src="imgUrl" style="width:60%">
+                        </b-col>
+                        <b-col>
+                            <h5>Video บนการ์ด</h5>
+                            {{vdoUrl}}
+                            <video width="100%" controls>
+                            <source :src="vdoUrl" type="video/mp4">
+                            </video>
+                        </b-col>
+                    </b-row>
+                </b-container>
+                <!-- <div>
                     <h5>ประเภท : {{passData.orderType}}</h5>
                     <h5>ราคา : {{passData.price}}</h5>
                     <h5>สถานะ : {{passData.status}}</h5>
-                </div>
+                </div> -->
                 <!-- <div v-for="item in imgData" :key="item">
                     <img :src="item.markerPath" alt="" class="left mr-3 ml-3 mt-3" style="width:200px;height:130px">
                     <video width="50%" controls>
@@ -42,14 +82,10 @@
                 </div> -->
                 <div>
                     <!-- {{imgData}} -->
-                    <img :src="passData.markerImg" alt="">
                     <!-- <video width="50%" controls>
                             <source :src="passData.video" type="video/mp4">
                     </video> -->
                     <!-- {{passData.status}} -->
-                    <div v-if="passData.status == 'ยังไม่ชำระเงิน'">
-                        <b-button class="yr-button" @click="goPayment()">ชำระเงิน</b-button>
-                    </div>
                 </div>
                 <!-- {{passData}} -->
             </b-modal>
@@ -58,6 +94,7 @@
 </template>
 <script>
 /* eslint-disable */
+const moment = require('moment');
 import Loading from 'vue-loading-overlay';
 var numeral = require('numeral');
 const axios = require('axios');
@@ -68,9 +105,14 @@ export default {
         },
     data(){
         return{
+            colorText: '',
+            dateShow: '',
+            imgUrl: '',
+            vdoUrl:'',
             showData: false,
             passData: '',
             userData: '',
+            textAlert: '',
             imgData: [],
              columns: [
         {
@@ -107,6 +149,7 @@ export default {
         this.isLoading = true;
        const getUserData = this.$session.get('sessionData')
        this.userData = getUserData[0]
+       console.log(this.userData)
         var querystring = require('querystring');
         var chackEP = querystring.stringify({
             user_id: this.userData.user_id
@@ -137,18 +180,21 @@ export default {
 //     }
 //   })
           .then((result) => {
-           
-            console.log(result.data)
-            const data = result.data
-            this.allData = result.data
-            console.log(data.length)
-            for (var i = 0; i < data.length; i++) { 
-                this.rows.push({orderId:data[i].order_id,
-            orderType:data[i].order_type,
-            createdAt: data[i].order_date,
-            price: data[i].order_price,
-            status: data[i].order_status,})
-            }
+            
+                console.log(result)
+                const data = result.data
+                this.allData = result.data
+                for (var i = 0; i < data.length; i++) { 
+                    this.rows.push({orderId:data[i].order_id,
+                orderType:data[i].order_type,
+                createdAt: data[i].order_date,
+                price: data[i].order_price,
+                status: data[i].order_status,
+                comment_admin: data[i].comment_admin,
+                comment_user: data[i].comment_user,
+                galleries: data[i].galleries,
+                marker: data[i].marker})
+                }
             
             // markerImg: data[i].marker.marker_img,
             // video: data[i].marker.marker_vdo
@@ -173,6 +219,7 @@ export default {
             for (var i = 0; i < data.length; i++) { 
                 if(this.rows[i].status == 1){
                     this.rows[i].status = "ยังไม่ชำระเงิน"
+                    this.colorText = 'cred'
                 }else if(this.rows[i].status == 2){
                     this.rows[i].status = "ชำระเงินแล้ว"
                 }else if(this.rows[i].status == 3){
@@ -204,14 +251,21 @@ export default {
     methods:{
         onRowClick(params) {
             // this.isLoading = true;
+            
             this.showData=true
             this.passData = params.row
+            this.imgUrl = this.passData.marker.marker_img
+            this.vdoUrl = this.passData.marker.marker_vdo
+            // console.log('5555'+this.passData.marker)
+            moment.locale('th')
+            this.dateShow = moment(this.passData.createdAt).format("D MMMM YYYY")
+            // console.log(this.passData)
             // this.imgData= []
-             var querystring = require('querystring');
-        var chackEP = querystring.stringify({
-          order_id: this.passData.orderId,
-        //   User_password: this.password,
-        });
+        //      var querystring = require('querystring');
+        // var chackEP = querystring.stringify({
+        //   order_id: this.passData.orderId,
+        // //   User_password: this.password,
+        // });
 
         const config = {
           headers: {

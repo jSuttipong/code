@@ -13,7 +13,6 @@
                   </div>
             </div>
           </router-link>
-          
           </b-col>
           <b-col>
             <router-link :to="productList[1].pLink" >
@@ -34,7 +33,7 @@
         </div>
     </div> -->
     </b-container>
-    <div style="height:519px"></div>
+    <!-- <div style="height:519px"></div> -->
     </div>
 </template>
 
