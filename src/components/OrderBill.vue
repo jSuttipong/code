@@ -1,12 +1,19 @@
 <template>
-    <div class="fontth">
+    <div class="fontth" style="height:1900px">
         <b-container class="wapper-order-bill" style="height: 1200px">
             <div >
                 <h2 class="pt-4 mb-4 center" >ข้อมูลการสั่งทำ</h2>
                 <div>
                     <b-row>
                         <b-col>
+                            <div v-if="orderType == 'การ์ด'">
                             <img :src="orderDataShow.url_marker" class="image-show" style="display: flex; justify-content: center;">
+                            </div>
+                            <div v-else>
+                                <video width="100%" controls>
+                                <source :src="this.orderDataShow.url_vdo" type="video/mp4">
+                                </video>
+                            </div>
                         </b-col>
                         <b-col>
                             <h3 >เลขที่การสั่งทำ {{orderDataShow.order_id}}</h3>
@@ -55,6 +62,9 @@
                         </div>
                     </b-col>
                 </b-row>
+                <div v-for="galleryData in galleryData" :key="galleryData.gallery_name">
+                    <img :src="galleryData.gallery_path" class="left mt-3 mr-3" style="width:300px;height:250px;position:relative">
+                </div>
             </div>
         </b-container>
     </div>
@@ -63,6 +73,7 @@
 /* eslint-disable */
 const moment = require('moment');
 var numeral = require('numeral');
+const axios = require('axios');
 import Loading from 'vue-loading-overlay';
 export default {
   props: ["orderData"],
@@ -76,16 +87,20 @@ export default {
           userData:'',
           orderStatus: '',
           orderDate: '',
-          orderType: ''
+          orderType: '',
+          galleryData: ''
       }
   },
    mounted(){
        const getUserData = this.$session.get('sessionData')
         this.userData = getUserData[0]
+        
        this.orderDataShow = this.orderData[0]
+    //     console.log('1111'+this.userData)
+    //    console.log('1111'+this.orderDataShow.order_status)
        moment.locale('th')
        this.orderDate = moment(this.orderDataShow.order_date).format("D MMMM YYYY")
-       this.orderDataShow.order_price = numeral(orderDataShow.order_price).format('0,0')
+       this.orderDataShow.order_price = numeral(this.orderDataShow.order_price).format('0,0')
         // console.log(this.orderDataShow.order_status.length)
                 if(this.orderDataShow.order_status == 1){
                     this.orderStatus = "ยังไม่ชำระเงิน"
@@ -96,7 +111,8 @@ export default {
                 }else if(this.orderDataShow.order_status == 4){
                 this.orderStatus = "เสร็จสิ้น"
                 }
-        if( this.orderDataShow.order_type == 0){
+
+        if(this.orderDataShow.order_type == 0){
                     this.orderType = "โฟโต้บุ๊ค"
                 }else this.orderType = "การ์ด";   
                 
@@ -115,6 +131,7 @@ export default {
         axios.post('http://fishyutt.xyz/dev/admin/files/api/orders_api/query_gallery.php', chackEP, config)
           .then((result) => {
               console.log(result)
+              this.galleryData = result.data
           }).catch((error) => {
             console.log(error.response)
             this.isLoading = false

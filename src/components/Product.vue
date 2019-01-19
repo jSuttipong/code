@@ -54,7 +54,7 @@ export default {
           {
             pName: 'Photobook',
             pImg: require('../assets/product/photobook.jpg'),
-            pLink: ''
+            pLink: '/CreatePhotobook'
           },]
     }
   }

@@ -1,5 +1,6 @@
 <template>
-    <div class="signin fontth" style="position:relative;margin: 93px 0">
+<div class="bg-signin">
+    <div class="signin fontth" style="position:relative;padding-top:100px;padding-bottom:100px;">
     <div class="helper">
       <b-card text-variant="black" header="Sign in" class="text-center signin-group">
         <b-form-input v-model="email" type="text" placeholder="อีเมล์" class="signin-input"></b-form-input>
@@ -28,6 +29,7 @@
       <!-- {{info}} -->
     </div>
   </div>
+ </div>
 </template>
 
 <script>

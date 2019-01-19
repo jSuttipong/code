@@ -25,7 +25,7 @@
               </b-col>
               <b-col>
                 <h1 class="mt-5 cwhite">ตัวอย่าง</h1>
-                <p class="fs24 cwhite">นี่เป็นตัวอย่างการแสดงผล AR บนการ์ดงานแต่ง โดยจะแสดงผลปุ่มที่สามารถกดเพื่อดูข้อมูลเช่น ข้อมูลสถานที่จัดงาน ข้อมูลการติดต่อ อีกทั้งสามารถแสดงวีดีโอที่คุณต้องการให้เล่นบนหน้าการ์ดได้ผ่านแอพพลิเคชั้น Youry</p>
+                <p class="fs24 cwhite">นี่เป็นตัวอย่างการแสดงผล AR บนรูปภาพ โดยจะแสดงวีดีโอที่คุณต้องการให้เล่นบนรูปภาพผ่านแอพพลิเคชั้น Youry</p>
                 <p class="cwhite">ดาวน์โหลดได้ที่</p>
                 <router-link to="https://play.google.com"><img src="../assets/gplogo.png" style="width:30%;background-color:white;border-radius:5px;padding:5px;position:relative" alt=""></router-link>
                 <b-col>
@@ -37,108 +37,38 @@
         </div>
         <b-container >
           <div class="work-area">
-            <div class="layout-area" >
-                <h3 class="center pt-3">เลือกจำนวนปุ่มที่จะแสดง</h3>
-              <div v-for="layout in layout" :key="layout.lid" class="box-on-layout" >
-                <img :src="layout.layoutImg" class="left layout-selected" >
-              <div class="layout-on" @click="active = layout.lid,layoutSet(layout)" :class="{layoutactive: active === layout.lid }">
-                <div class="text-on-layout" >{{layout.btn}}</div>
-              </div>
-              </div>
-            </div>
-            <div class="inputData-area" >
-              <div v-if="!image">
-                  <form ref="marker" class="input-none" enctype="multipart/form-data">
-                    <label for="markerUpload" class="box-upload mt-5 mb-5" style="display: flex; justify-content: center;">
+            <div >
+              <h3 class="center pt-3">สร้าง AR ของคุณ</h3>
+              <div v-if="!video">
+                  <form ref="videoShow" class="input-none" enctype="multipart/form-data">
+                    <label for="vdoUpload" class="box-upload mt-5 mb-5" style="display: flex; justify-content: center;">
                       <h1 class="text-on-upload">
                         <i class="fas fa-upload">
-                          <h5 class="fontth mt-2">Upload Marker</h5>
+                          <h5 class="fontth mt-2">Upload Video</h5>
                         </i>
                       </h1>
                     </label>
                     <input
                       class="input-none"
                       type="file"
-                      name="files"
-                      id="markerUpload"
-                      ref="markerUpload"
-                      @change="onFileChange"
+                      name="vdo"
+                      id="vdoUpload"
+                      ref="vdoUpload"
+                      @change="onFileChangeToVideo"
                     >
                     </form>
                     </div>
-              <div v-else>
-              <b-row >
-                <b-col>
-                    <div >
-                      <img :src="image" class="image-show" style="display: flex; justify-content: center;">
-                      <b-button class="mt-3 ml-3 mb-3 yr-button" @click="removeImage()">ลบ Marker</b-button>
-                    </div>
-                </b-col>
-                <b-col class="pr-4">
-                  <div v-if="image">
-                    <h4 class="mt-3 fontth">อัพโหลดวีดีโอ ที่จะแสดงบนAR</h4>
-                    <div v-if="!video">
-                      <form ref="videoShow" class="input-none" enctype="multipart/form-data">
-                        <label for="vdoUpload" class="button-upload mt-2" >
-                          <h5 class="text-on-btn-upload">
-                            <i class="fas fa-upload"></i>
-                          </h5>
-                        </label>
-                        <input
-                          class="input-none"
-                          type="file"
-                          name="vdo"
-                          id="vdoUpload"
-                          ref="vdoUpload"
-                          @change="onFileChangeToVideo"
-                        >
-                      </form>
-                    </div>
-                    <div v-else class="mb-5">
-                    <video width="100%" controls>
+                <div v-else>
+                  <b-row>
+                    <b-col>
+                      <h5 class="mt-3 fontth">วีดีโอ</h5><p class="cred">*หมายเหตุ วีดีโอที่อัพโหลดจะนำไปตัดต่อเพื่อแสดงผล AR ที่สมบูรณ์ยิ่งขึ้นหากคุณต้องการ</p>
+                      <video width="100%" controls>
                       <source :src="video" type="video/mp4">
                     </video>
                     <b-button @click="removeVideo" class="yr-button mt-2 mb-2">Remove Video</b-button>
-                  </div>
-                  <h4 class="corange">ปุ่มที่จะแสดง</h4>
-                  <div>
-                    <div >
-                      <!-- <b-form-select v-if="countBtn == 4||countBtn == 3||countBtn == 2||countBtn == 1" v-model="btnData1" :options="btnOnCard" class="mb-3 yr-select" >
-                        <template slot="first">
-                        <option :value="null" disabled>-- เลือกปุ่มที่ 1 --</option>
-                        </template>
-                      </b-form-select> -->
-                      <div>
-                        <h5 class="mb-2">Location</h5>
-                        <b-form-input class="mb-2" v-model="locationBtn" type="text" placeholder="Location ของคุณ"></b-form-input>
-                           <GmapMap
-                            :center="currentLocation"
-                            :zoom="17"
-                            map-type-id="terrain"
-                            id="mapId"
-                            style="width: 500px; height: 300px"
-                          >
-                          <!-- <GmapMarker ref="mapMarker" :position="google && new google.maps.LatLng(13.923633 , 100.536543)"/> -->
-                          <GmapMarker ref="myMarker"
-                         :position="google && new google.maps.LatLng(13.923633, 100.536543)"/>
-                            <!-- <GmapMarker
-                              :clickable="true"
-                              :draggable="true"
-                            /> -->
-                          </GmapMap>
-                          <!-- <div class="geolocation" v-on:click="geolocation()">
-                            <img src="../../static/images/geolocation.png" />
-                          </div> -->
-                          <!-- <div class="search">
-                            <input type="text" v-model="searchAddressInput" v-on:change="searchLocation()">
-                          </div> -->
-                      </div>
-                      <div>
-                        <h5 class="mb-2">Contact</h5>
-                        <b-form-input class="mb-2" v-model="contactBtn" type="text" placeholder="การติดต่อ ของคุณ เช่นเบอร์โทรศัพท์"></b-form-input>
-                      </div>
-                      <div>
-                        <h5>Gallerys</h5>
+                    </b-col>
+                    <b-col>
+                      <h5 class="mt-3">Gallerys</h5>
                         <form ref="gallerys" enctype="multipart/form-data">
                           <!-- <label for="file-upload" class="button-upload mt-2">
                                                   <h5 class="text-on-btn-upload"><i class="fas fa-upload"></i></h5>
@@ -151,28 +81,10 @@
                             <input type="file" ref="gallerysData" name="gallerys[]" id="filesToUpload" @change="setDataGallerys" multiple="multiple">
                           </label>
                         </form>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
-                </b-col>
-              </b-row>
-              <b-container>
-                  <div class="mb-3">
-                        <h5>ข้อมูลความต้องการของคุณ</h5>
-                        <b-form-textarea id="textarea1"
-                     v-model="commentsData"
-                     placeholder="ข้อมูลความต้องการของคุณ เช่น ต้องการปุ่มแบบไหน รูปทรงของปุ่ม (ใส่ข้อมูลหรือไม่ใส่ก็ได้)"
-                     :rows="3"
-                     :max-rows="6">
-                    </b-form-textarea>
-                  </div>
-                <div>
-                  <b-button class="yr-button right" @click="checkInputData()">สั่งทำ</b-button>
-                        <!-- <b-button class="yr-button right">ยกเลิก</b-button> -->
-                  </div>
-              </b-container>
-              </div>
+                        <b-button class="yr-button right" @click="checkInputData()">สั่งทำ</b-button>
+                    </b-col>
+                  </b-row>
+                </div>
             </div>
           </div>
 
@@ -231,7 +143,7 @@ var numeral = require('numeral');
 const axios = require('axios');
   export default {
     props: ["Layouts"],
-    name: 'app',
+    name: 'CreatePhotobook',
     components: {
       FreeTransform,
       Signin,
@@ -246,11 +158,6 @@ const axios = require('axios');
         defaultPriceFormat: '',
         active: '1',
         countBtn: '1',
-        btnCard: null,
-        btnData1: null,
-        btnData2: null,
-        btnData3: null,
-        btnData4: null,
         gallerytBtn: '',
         contactBtn: '',
         locationBtn: '',
@@ -278,58 +185,6 @@ const axios = require('axios');
         isLoading: false,
         chackUpload: false,
         myFormData: '',
-        btnOnCard: [
-          // { 
-          //   text: 'เลือกปุ่ม',
-          //   value: null
-          // },
-          {
-            text:'location',
-            value: 'location',
-            btnModel: ''
-          },
-          {
-            text: 'gallery',
-            value: 'gallery',
-            btnModel: ''
-          },
-          {
-            text: 'contact',
-            value: 'contact',
-            btnModel: ''
-          },
-        ],
-        layout: [
-          {
-            layoutImg: require('../assets/layout/lv2_1.png'),
-            lid: '1',
-            value: '1',
-            btn: '1 Button',
-            btnPrice: 500
-          },
-          {
-            layoutImg: require('../assets/layout/lv2_2.png'),
-            lid: '2',
-            value: '2',
-            btn: '2 Button',
-            btnPrice: 1000
-          },
-          {
-            layoutImg: require('../assets/layout/lv2_3.png'),
-            lid: '3',
-            value: '3',
-            btn: '3 Button',
-            btnPrice: 1500
-          },
-          {
-            layoutImg: require('../assets/layout/lv2_5.png'),
-            lid: '4',
-            value: '4',
-            btn: '4 Button',
-            btnPrice: 2000
-          },
-          
-        ],
         exampleDesign: [
           {
               ex: require('../assets/theme/1-ex/ex1.png'),
@@ -353,50 +208,17 @@ const axios = require('axios');
 
     },
     methods: {
-
-
-      layoutSet(data){
-        this.layoutImgData = data.layoutImg
-        this.cardBntPrice  = data.btnPrice
-        this.countBtn = parseInt(data.value)
-        console.log(data)
-      },
+      // layoutSet(data){
+      //   this.layoutImgData = data.layoutImg
+      //   this.cardBntPrice  = data.btnPrice
+      //   this.countBtn = parseInt(data.value)
+      //   console.log(data)
+      // },
       onSlideStart (slide) {
       this.sliding = true
     },
     onSlideEnd (slide) {
       this.sliding = false
-    },
-    onFileChange(e) {
-      this.markerData = this.$refs.markerUpload.files[0];
-    //   this.markerData = new FormData(this.$refs.marker);
-    // this.markerData = e.target.files[0]
-    // this.markerData = document.getElementById('marker-upload').files[0]
-      var files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-      this.createImage(files[0]);
-    },
-    createImage(file) {
-      this.isLoading = true;
-      setTimeout(() => {
-        var image = new Image();
-        var reader = new FileReader();
-        var vm = this;
-
-        reader.onload = e => {
-          vm.image = e.target.result;
-        };
-        reader.readAsDataURL(file);
-        this.isLoading = false;
-      }, 300);
-    },
-    removeImage: function(e) {
-      this.isLoading = true
-      setTimeout(() => {
-          this.image = "";
-          this.isLoading = false
-        },200)
-      
     },
     onFileChangeToVideo(e) {
         // this.videoData = e.target.files[0]
@@ -457,22 +279,17 @@ const axios = require('axios');
         this.userData = getUserData[0]
         var theData = new FormData();
         theData.append('user_id',this.userData.user_id);
-        theData.append('layout_id',this.countBtn);
-        theData.append('location',this.locationBtn);
-        theData.append('contact',this.contactBtn);
-        theData.append('price',this.allPrice);
-        theData.append('orther','none');
-        theData.append('files',this.markerData);
-        theData.append('vdo',this.videoData);
+        theData.append('files',this.videoData);
         for( var i = 0; i < this.gallerys.length; i++ ){
           let file = this.gallerys[i];
-
-          theData.append('gallerys[' + i + ']', file);
+          theData.append('markers[' + i + ']', file);
         }
+        var countFiles = this.gallerys.length*150
+        theData.append('price',countFiles);
       
       axios({
                   method: 'post',
-                  url: 'http://fishyutt.xyz/dev/admin/files/api/orders_api/insert_order_card.php',
+                  url: 'http://fishyutt.xyz/dev/admin/files/api/orders_api/insert_order_photobook.php',
                   data: theData,
                   config: { headers: {'Content-Type': 'multipart/form-data' }}
               })
@@ -532,16 +349,6 @@ const axios = require('axios');
     overflow: hidden;
     display: inline-block;
   }
-
-  /* .btn {
-  border: 2px solid gray;
-  color: gray;
-  background-color: white;
-  padding: 8px 20px;
-  border-radius: 8px;
-  font-size: 20px;
-  font-weight: bold;
-} */
 
   .upload-btn-wrapper input[type=file] {
     font-size: 100px;

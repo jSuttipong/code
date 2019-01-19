@@ -478,3 +478,12 @@ ul {
     /* background-color: #d1e9ff !important; */
     /* opacity: 1; */
 }
+.bg-signin{
+    background-image: linear-gradient(to right bottom, #ffffff, #eaeaea, #d5d5d5, #c0c0c0, #acacac);
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}

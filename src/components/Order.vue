@@ -45,10 +45,14 @@
                         <b-col>
                             <div class="bot-border mb-2"><h5>ราคา</h5></div>
                             <p>{{passData.price}}</p>
+                            <div class="bot-border mb-2"><h5>Location</h5></div>
+                            <p>{{cardDetail.card_detail_location}}</p>
                         </b-col>
                         <b-col>
                             <div class="bot-border mb-2"><h5>สถานะ</h5></div>
                             <p>{{passData.status}}</p>
+                            <div class="bot-border mb-2"><h5>Contact</h5></div>
+                            <p>{{cardDetail.card_detail_contact}}</p>
                             <!-- this.passData -->
                             <!-- {{passData.marker.marker_img}} -->
                             <div v-if="passData.status == 'ยังไม่ชำระเงิน'">
@@ -56,10 +60,15 @@
                     </div>
                         </b-col>
                     </b-row>
+                    <div>
+                        <div class="bot-border mb-2"><h5>ข้อมูลเพิ่มเติม</h5></div>
+                        <div v-if="cardDetail.card_detail_other == ''"><p >ไม่มีการส่งรายละเอียดที่ต้องการเพิ่มเติม</p></div>
+                        <div v-else><p>{{cardDetail.card_detail_other}}</p></div>
+                    </div>
                     <b-row>
                         <b-col>
                             <h5>รูป marker</h5>
-                            <img :src="imgUrl" style="width:60%box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);border: 1px solid rgba(0, 0, 0, 0.10);">
+                            <img :src="imgUrl" style="width:100%;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);border: 1px solid rgba(0, 0, 0, 0.10);">
                         </b-col>
                         <b-col>
                             <h5 class="mb-5">Video บนการ์ด</h5>
@@ -69,9 +78,9 @@
                         </b-col>
                     </b-row>
                     <div>
-                        <h5 class="mt-3">รูป Gallery</h5>
-                        <div v-for="galleriesData in passData.galleries" :key='galleriesData.gallery_url'>
-                            <img :src="galleriesData.gallery_url" class="left" style="width:20%;margin: 5px">
+                        <h5 class="mt-3">รูป Gallerys</h5>
+                        <div v-for="galleriesData in passData.galleries" :key='galleriesData.gallery_url' style="width:100%; height:auto">
+                            <img :src="galleriesData.gallery_url" class="left" style="width:20%;height:120px;margin: 5px">
                         </div>
                     </div>
                 </b-container>
@@ -121,6 +130,7 @@ export default {
             textAlert: '',
             imgData: [],
             galleryData: [],
+            cardDetail: '',
              columns: [
         {
           label: 'Order ID',
@@ -199,7 +209,8 @@ export default {
                 comment_admin: data[i].comment_admin,
                 comment_user: data[i].comment_user,
                 galleries: data[i].galleries,
-                marker: data[i].marker})
+                marker: data[i].marker,
+                cardDetail: data[i].card_detail})
                 }
             
              for (var i = 0; i < data.length; i++) { 
@@ -245,6 +256,8 @@ export default {
             
             this.showData=true
             this.passData = params.row
+            console.log(this.passData.marker)
+            this.cardDetail = this.passData.cardDetail
             this.imgUrl = this.passData.marker.marker_img
             this.vdoUrl = this.passData.marker.marker_vdo
              console.log(this.passData.galleries)

@@ -57,6 +57,7 @@
                       <h1 class="text-on-upload">
                         <i class="fas fa-upload">
                           <h5 class="fontth mt-2">Upload Marker</h5>
+                          <h5 class="fontth mt-2">(รูปการ์ดของคุณ)</h5>
                         </i>
                       </h1>
                     </label>
@@ -189,12 +190,14 @@
           <b-col>
             <div class="bot-border mb-2"><h5>ราคาสร้างสรรค์งาน</h5></div>
             <p>{{defaultPriceFormat}} บาท</p>
-            <div class="bot-border mb-2"><h5>รวม</h5></div>
-            <p>{{allPrice}} บาท</p>
+            <div class="bot-border mb-2"><h5>รวมราคาปุ่ม</h5></div>
+            <p>{{cardBntPrice}} บาท</p>
           </b-col>
           <b-col>
             <div class="bot-border mb-2"><h5>ราคาต่อปุ่ม</h5></div>
-            <p>{{cardBntPrice}} บาท</p>
+            <p>500 บาท</p>
+            <div class="bot-border mb-2"><h5>รวม</h5></div>
+            <p>{{allPrice}} บาท</p>
           </b-col>
           <b-col>
             <div class="bot-border mb-2"><h5>จำนวนปุ่ม</h5></div>
@@ -210,6 +213,9 @@
       <div>
         <Signin></Signin>
       </div>
+    </b-modal>
+    <b-modal ref="reData" title="อัพโหลดข้อมูลใหม่อีกครั้ง">
+      <h3>กรุณาอัพโหลดข้อมูลใหม่อีกครั้ง</h3>
     </b-modal>
 
     <div class="vld-parent">
@@ -531,7 +537,7 @@ const axios = require('axios');
         theData.append('location',this.locationBtn);
         theData.append('contact',this.contactBtn);
         theData.append('price',this.allPrice);
-        theData.append('orther','none');
+        theData.append('orther',this.commentsData);
         theData.append('files',this.markerData);
         theData.append('vdo',this.videoData);
         for( var i = 0; i < this.gallerys.length; i++ ){
@@ -555,6 +561,8 @@ const axios = require('axios');
           .catch((error) => {
             console.log('dataerror--------'+error)
             this.isLoading = false
+            this.$refs.reData.show()
+            
           })
        
     },
