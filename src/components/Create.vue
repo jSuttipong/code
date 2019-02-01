@@ -10,7 +10,7 @@
             <b-row>
               <b-col>
                 <b-carousel id="carousel1"
-                style="width:100%;"
+                style="width:100%;max-width:550px"
                 controls
                 indicators
                 background="#ababab"
@@ -115,22 +115,26 @@
                       </b-form-select> -->
                       <div>
                         <h5 class="mb-2">Location</h5>
-                        <b-form-input class="mb-2" v-model="locationBtn" type="text" placeholder="Location ของคุณ"></b-form-input>
-                           <!-- <GmapMap
+                        <!-- <b-form-input class="mb-2" v-model="locationBtn" type="text" placeholder="Location ของคุณ"></b-form-input> -->
+                        <div class="mb-2 ">
+                        <GmapAutocomplete placeholder="โปรดเพิ่มตำแหน่งของคุณ" @place_changed="setLocation" class="location-input"></GmapAutocomplete>
+                        </div>
+                        <!-- <GmapAutocomplete placeholder="..." @place_changed="ชื่อฟังก์ชัน"></GmapAutocomplete> -->
+                           <GmapMap
                             :center="currentLocation"
                             :zoom="17"
                             map-type-id="terrain"
                             id="mapId"
                             style="width: 500px; height: 300px"
-                          > -->
-                          <!-- <GmapMarker ref="mapMarker" :position="google && new google.maps.LatLng(13.923633 , 100.536543)"/> -->
+                          >
+                          <GmapMarker ref="mapMarker" :position="currentLocation"/>
                           <!-- <GmapMarker ref="myMarker"
                          :position="google && new google.maps.LatLng(13.923633, 100.536543)"/> -->
                             <!-- <GmapMarker
                               :clickable="true"
                               :draggable="true"
                             /> -->
-                          <!-- </GmapMap> -->
+                          </GmapMap>
                           <!-- <div class="geolocation" v-on:click="geolocation()">
                             <img src="../../static/images/geolocation.png" />
                           </div> -->
@@ -237,6 +241,8 @@ import Signin from '@/components/Signin'
 import Loading from 'vue-loading-overlay';
 import FreeTransform from 'vue-free-transform'
 import {gmapApi} from 'vue2-google-maps'
+import VueGoogleAutocomplete from "vue-google-autocomplete";
+
 var numeral = require('numeral');
 const axios = require('axios');
   export default {
@@ -246,10 +252,13 @@ const axios = require('axios');
       FreeTransform,
       Signin,
       Loading,
+      VueGoogleAutocomplete
     },
     data() {
       return {
+        locationName: '',
         currentLocation : { lat : 13.923633, lng : 100.536543},
+        latlong: '',
         searchAddressInput: '',
         cardBntPrice: 500,
         defaultPrice: 2000,
@@ -396,6 +405,14 @@ const axios = require('axios');
           });
           map.panTo(position);
       },
+      setLocation(place){
+        // console.log('place', place.formatted_address + '' + place.geometry.location.lat() + '' +place.geometry.location.lng())
+        this.currentLocation.lat = place.geometry.location.lat();
+        this.currentLocation.lng = place.geometry.location.lng();
+        this.latlong =  this.currentLocation.lat+','+this.currentLocation.lng;
+        this.locationName = place.formatted_address
+        console.log('place',place.formatted_address)
+      },
       // initMap() {
       //   var map = new google.maps.Map(document.getElementById('map'), {
       //     zoom: 4,
@@ -534,7 +551,8 @@ const axios = require('axios');
         var theData = new FormData();
         theData.append('user_id',this.userData.user_id);
         theData.append('layout_id',this.countBtn);
-        theData.append('location',this.locationBtn);
+        theData.append('location',this.locationName);
+        theData.append('latlong',this.latlong)
         theData.append('contact',this.contactBtn);
         theData.append('price',this.allPrice);
         theData.append('orther',this.commentsData);

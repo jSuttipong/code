@@ -12,23 +12,30 @@ import { VueSpinners } from '@saeris/vue-spinners'
 import VueGoodTablePlugin from 'vue-good-table';
 import * as VueGoogleMaps from 'vue2-google-maps'
 import Vuetify from 'vuetify'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
 
 Vue.use(VueSession)
 Vue.use(FreeTransform)
 Vue.use(VueSpinners)
 Vue.use(VueGoodTablePlugin);
+Vue.use(VueAwesomeSwiper, /* { default global options } */)
+// vue.use(VueGoogleAutocomplete)
 // CSS
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vuetify/dist/vuetify.min.css'
+import './assets/Styleres.css'
 
 Vue.use(BootstrapVue)
 Vue.use(Vuetify)
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyDulah3sGYkFsIABTFuT-ifDpHaI9NErn4',
+    key: 'AIzaSyDhpkVWQbYzo9BT3xpIniDaAonCY1a_Wjw',
     libraries: 'places', // This is required if you use the Autocomplete plugin
+    region: 'TH',
+    language: 'th'
     // OR: libraries: 'places,drawing'
     // OR: libraries: 'places,drawing,visualization'
     // (as you require)

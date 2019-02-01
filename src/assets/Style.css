@@ -285,14 +285,18 @@ ul {
     opacity: 0.7;
   }
   .product-box{
-    width:100% !important; 
+    width:100% !important;
+    max-width: 650px;
     height:400px;
     position:relative;
+    margin-left: auto;
+    margin-right: auto;
     cursor: pointer;
   }
   .product-select{
     display: block;
     width: 100%;
+    max-width: 650px;
     height: 400px;
     border-radius: 5px;
     /* border: solid 2px #b7b7b7;
@@ -486,4 +490,13 @@ ul {
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+}
+.location-input{
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #CED4DA;
+    padding: 7px;
+}
+.box-display-phone{
+    display: none;
 }

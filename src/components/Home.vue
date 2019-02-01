@@ -1,15 +1,13 @@
 <template>
   <div class="background-home">
-    <!-- <div>
-      <HomeContent/>
-    </div> -->
-    <div >
+    <div>
+  <b-container>
   <b-row>
       <b-col md="1">
       </b-col>
       <b-col>
         <b-row>
-          <b-col md="5" class="fontth fs24 cwhite">
+          <b-col md="6" class="fontth fs24 cwhite">
             <h1 class="mt-5">Youry คืออะไร?</h1>
             <p> เราคือแพลตฟอร์มที่รับทำสื่อสิ่งพิมพ์ในรูปแบบออนไลน์
               โดยเราได้นำเทคโนโลยีAR มาใช้งานร่วมกับสื่อสิ่งพิมพ์
@@ -20,65 +18,46 @@
             <br>
             <p>สำหรับท่านที่ไม่เข้าใจว่าAR คือะไร <a href="#" class="cred">คลิกเลย</a></p>
           </b-col>
-          <b-col md="1"></b-col>
-          <b-col md="6" left><img src="../assets/banner1.png" height="470px" width="auto" class="mt-5"></b-col>
+          <!-- <b-col md="1"></b-col> -->
+          <b-col md="6" left><img src="../assets/banner1.png" height="" width="100%" class="mt-5"></b-col>
         </b-row>
         <p class="fontth fs32 cwhite">สั่งสินค้าได้ง่ายๆเพียงแค่</p>
-        <div v-for="(item) in items" class="fontth cwhite" :key="item.id">
-          <div class="flowbox">
-            {{item.numFlow}}
+        <b-row>
+          <div v-for="(item) in items" class="fontth cwhite ar-for-sample" :key="item.id">
+            <b-col>
+              <div class="flowbox">
+                <h5>{{item.numFlow}}</h5>
             <br>
             <img :src="item.iconFlow">
             <br>
             <br>
             {{item.nameFlow}}
           </div>
+            </b-col>
         </div>
+      
+          <swiper :options="swiperOption" class="box-display-phone">
+            <swiper-slide v-for="(item) in items" class="fontth cwhite" :key="item.id">
+              <div class="flowbox">
+            {{item.numFlow}}
+            <br>
+              <img :src="item.iconFlow">
+            <br>
+            <br>
+            {{item.nameFlow}}
+          </div>
+              </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+        
+        </b-row>
         <!-- v for -->
 
       </b-col>
       <b-col md="1">
       </b-col>
     </b-row>
-    <div class="fontth mt-5 ">
-      <b-container>
-        <!-- <h1 class="center mb-3">สินค้าแนะนำ</h1>
-        <b-row>
-          <b-col md="3">
-            <div v-for="item in productList" :key="item.id">
-              <img :src="item.pImg" class="product-box mt-3">
-            </div>
-          </b-col>
-          <b-col md="5">
-            <h1>Photo book</h1>
-            <p class="fs24">โฟโต้บุ๊คสำหรับการท่องเที่ยวที่ทำให้คุณเก็บความสุข
-              ย้อนวันวานไปกับรุปภาพและวีดีโอของคุณ ที่คุณได้
-              รวบรวมเก็บไว้ในนี้</p>
-            <h3>ตัวเลือก</h3>
-            <div>
-              <p class="left">ชนิดปก :</p>
-              <b-form-select v-model="coverSelected" :options="coverType" class="mb-3 yr-select" size="sm" />
-              <p class="left">ขนาดของหนังสือ :</p>
-              <b-form-select v-model="bSizeSelected" :options="bsType" class="mb-3 yr-select" size="sm" />
-              <p class="left">จำนวนหน้า :</p>
-              <b-form-select v-model="pageSelected" :options="pageType" class="mb-3 yr-select" size="sm" />
-              <p class="left">ราคา : 1,520</p>
-            </div>
-            <div class="mt-5">
-              <b-button class="yr-button">เลือก</b-button>
-            </div>
-
-          </b-col>
-          <b-col md="4">
-            <i class="fas fa-expand-arrows-alt" v-b-modal.modal1></i>
-            <img src="../assets/product/bookcover.png" style="width:auto; height:300px;">
-            <b-modal id="modal1" class="center">
-              <img src="../assets/product/bookcover.png" style="width:400px" size="lg">
-            </b-modal>
-          </b-col>
-        </b-row> -->
-      </b-container>
-    </div>
+    </b-container>
     <b-container>
     </b-container>
     <div class="bgartest mt-5 center cwhite fontth">
@@ -95,7 +74,7 @@
       </b-container>
     </div>
     <div class="fontth" style="height: auto">
-      <b-container>
+      <b-container class="ar-for-sample">
         <h1 class=" mt-5 center">ทดลองสแกน AR ได้ที่นี่</h1>
         <b-row>
           <b-col>
@@ -226,6 +205,14 @@ import HomeContent from '@/components/HomeContent'
             text: '40'
           },
         ],
+        swiperOption: {
+          // some swiper options/callbacks
+          // 所有的参数同 swiper 官方 api 参数
+          // ...
+          pagination: {
+            el: '.swiper-pagination'
+          }
+        }
         
 
       }
@@ -237,6 +224,17 @@ import HomeContent from '@/components/HomeContent'
         this.$session.destroy()
         
       }
+    },
+    computed: {
+      swiper() {
+        return this.$refs.mySwiper.swiper
+      }
+    },
+    mounted() {
+      // current swiper instance
+      // 然后你就可以使用当前上下文内的swiper对象去做你想做的事了
+      console.log('this is current swiper instance object', this.swiper)
+      this.swiper.slideTo(3, 1000, false)
     }
 
   }
@@ -252,6 +250,7 @@ import HomeContent from '@/components/HomeContent'
   .background-home{
     background-image: url("../assets/bg.png");
     background-repeat: no-repeat;
+    width: 100%;
   }
 
   .f-left {
@@ -271,7 +270,7 @@ import HomeContent from '@/components/HomeContent'
     width: 250px;
     height: 250px;
     border-radius: 1000px;
-    float: left;
+    /* float: left; */
     text-align: center;
     margin: 5px;
     padding: 30px

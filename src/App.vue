@@ -46,9 +46,10 @@
                     backgroundColor= '#ffffff'
                     :is-full-page="true"></loading>
     </div>
-    <div style="position:relative;min-height:620px">
+    <div style="position:relative;min-height:640px">
       <router-view/>
     </div>
+    <!-- Footer*********************************************** -->
     <div class="footer fontth cwhite" style="bottom:0; position:relative; padding-top:1px">
       <b-container >
         <b-row class="mt-5" >
@@ -59,10 +60,9 @@
             </li>
             </ul>
             <br>
-            <p style="font-size:12px;"><i class="fas fa-copyright" style="font-size:12px; margin-top: 110px"></i>2018 Youry, All rights reserved.</p>
           </b-col>
           <b-col md="4">
-            <p>ติดต่อเรา</p>
+            <h5>ติดต่อเรา</h5>
             <p>เลขที่ 80 ถนนป๊อปปูล่า ต.บ้านใหม่
               อำเภอปากเกร็ด จังหวัดนนทบุรี 11120
               โทรศัพท์ 091-765-9890
@@ -77,6 +77,7 @@
             <b-button class="yr-button mt-3">ส่ง</b-button>
           </b-col>
         </b-row>
+            <p style="font-size:12px;"><i class="fas fa-copyright" style="font-size:12px; margin-top: 20px;"></i>2018 Youry, All rights reserved.</p>
       </b-container>
     </div>
   </div>
