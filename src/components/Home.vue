@@ -35,7 +35,6 @@
           </div>
             </b-col>
         </div>
-      
           <swiper :options="swiperOption" class="box-display-phone">
             <swiper-slide v-for="(item) in items" class="fontth cwhite" :key="item.id">
               <div class="flowbox">
@@ -49,10 +48,8 @@
               </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
-        
         </b-row>
         <!-- v for -->
-
       </b-col>
       <b-col md="1">
       </b-col>
