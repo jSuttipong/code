@@ -1,5 +1,6 @@
 <template>
-    <div class="signin fontth" style="position:relative;margin: 93px 0">
+<div class="bg-signin">
+    <div class="signin fontth" style="position:relative;padding-top:100px;padding-bottom:100px;">
     <div class="helper">
       <b-card text-variant="black" header="Sign in" class="text-center signin-group">
         <b-form-input v-model="email" type="text" placeholder="อีเมล์" class="signin-input"></b-form-input>
@@ -28,6 +29,7 @@
       <!-- {{info}} -->
     </div>
   </div>
+ </div>
 </template>
 
 <script>
@@ -70,12 +72,12 @@ export default {
         var querystring = require('querystring');
 
         var chackEP = querystring.stringify({
-          User_email: this.email,
-          User_password: this.password,
-          User_fname: this.fname,
-          User_lname: this.lname,
-          User_mobile: this.phoneNumber,
-          User_reg_date: this.regisDate
+          user_email: this.email,
+          user_password: this.password,
+          user_fname: this.fname,
+          user_lname: this.lname,
+          user_mobile: this.phoneNumber,
+          user_reg_date: this.regisDate
         });
         const config = {
           headers: {
@@ -83,12 +85,26 @@ export default {
           }
         }
         
-        axios.post('http://fishyutt.xyz/api/youry/insert_user.php', chackEP, config)
+        axios.post('http://fishyutt.xyz/dev/admin/files/api/users_api/create_user.php', chackEP, config)
           .then((result) => {
               console.log(result)
               console.log('sccess')
-              this.$router.push( {name:'Home'})
-              this.isLoading = false
+              var chackEP2 = querystring.stringify({
+                user_email: this.email,
+                user_password: this.password,
+              });
+              axios.post('http://fishyutt.xyz/dev/admin/files/api/users_api/check_user_login.php', chackEP2, config)
+               .then((result) => {
+                  this.$session.start()
+                  this.$session.set('session', true)
+                  this.$session.set('sessionData', result.data)
+                  console.log(this.$session.getAll())
+                this.$router.push( {name:'Home'})
+                this.isLoading = false
+               }).catch((error) => {
+                // Do somthing
+                console.log(error.response)
+              })  
           })
           .catch((error) => {
             // Do somthing

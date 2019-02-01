@@ -12,6 +12,8 @@ import Layout from '@/components/Layout'
 import ChackOrder from '@/components/ChackOrder'
 import Order from '@/components/Order'
 import OrderCreate from '@/components/OrderCreate'
+import OrderBill from '@/components/OrderBill'
+import CreatePhotobook from '@/components/CreatePhotobook'
 
 
 Vue.use(Router)
@@ -84,6 +86,18 @@ export default new Router({
       path: '/OrderCreate',
       name: 'OrderCreate',
       component: OrderCreate,
+      props: true
+    },
+    {
+      path: '/OrderBill',
+      name: 'OrderBill',
+      component: OrderBill,
+      props: true
+    },
+    {
+      path: '/CreatePhotobook',
+      name: 'CreatePhotobook',
+      component: CreatePhotobook,
       props: true
     },
     { path: '*', redirect: '/' }

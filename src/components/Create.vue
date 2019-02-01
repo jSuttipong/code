@@ -1,38 +1,16 @@
 <template>
-  <div class="wrapper fontth" style="background-color:#e9ebee; height:100%">
+  <div class="wrapper fontth pagebg" style="background-color:#fff; height:100%">
       <div v-if="themeSelection == false">
-        <b-container class="pt-3">
-          <h1 class="mb-3">เลือกธีม AR</h1>
-          <div v-for="themeItem in themeItem" :key="themeItem.themeTag" >
-            <div @click="selectTheme(themeItem)">
-              <div class="box-on">
-                <h3 class="text-on-pic cwhite">{{themeItem.themeName}}</h3>
-                <img class="theme-select" :src="themeItem.themepic" alt="">
-              </div>
-            </div>
-          </div>
-
-    <!-- <form ref="myForm">
-      <input type="file" name="files" id="file" ref="file" @change="onFileChange"/>
-      <b-button @click="go()">send</b-button>
-    </form>
-    <form ref="my2">
-      <input type="file" name="vdo" id="file" ref="file" />
-      <b-button @click="go()">send</b-button>
-    </form> -->
-
-    <img :src="image" style="display: flex; justify-content: center;">
-        </b-container>
-      </div>
-     <div v-else>
-        <div class="box-onbanner">
-            <h1 class="text-on-banner cwhite">{{selecttionItem.themeName}}</h1>
-            <img class="theme-banner" :src="selecttionItem.themepic" alt="">
-        </div>
-        <b-container class="mt-3 mb-5">
-          <p>{{selecttionItem.themeDetail}}</p>
-          <b-carousel id="carousel1" class="mt-5"
-                style="text-shadow: 1px 1px 2px #333;width:50%;margin-left: auto;margin-right: auto;"
+          <!-- <div class="box-onbanner">
+            <h1 class="text-on-banner cwhite">ตัวอย่าง</h1>
+            <img class="theme-banner" src="../assets/theme/modern.jpg" alt="">
+        </div> -->
+        <div class="box-example ">
+          <b-container class="">
+            <b-row>
+              <b-col>
+                <b-carousel id="carousel1"
+                style="width:100%;max-width:550px"
                 controls
                 indicators
                 background="#ababab"
@@ -43,19 +21,207 @@
                 @sliding-start="onSlideStart"
                 @sliding-end="onSlideEnd"
           >
-            <div v-for=" data in selecttionItem.themeEx" :key="data.ex">
+            <div v-for=" data in exampleDesign" :key="data.ex">
               <b-carousel-slide :img-src="data.ex"
               ></b-carousel-slide>
             </div>
           </b-carousel>
-          <p class="mt-2 cred">*นี่เป็นเพียงตัวอย่างที่นำมาแสดงเท่านั้น เมื่อสั่งทำการออกแบบจะเปลี่ยนแปลงตามความต้องการ</p>
-      <div class="mt-5 center">
-        <b-button @click="back()" class="yr-button">ยกเลิก</b-button>
-        <b-button @click="next()" class="yr-button">ตกลง</b-button>
-      </div>
+              </b-col>
+              <b-col>
+                <h1 class="mt-5 cwhite">ตัวอย่าง</h1>
+                <p class="fs24 cwhite">นี่เป็นตัวอย่างการแสดงผล AR บนการ์ดงานแต่ง โดยจะแสดงผลปุ่มที่สามารถกดเพื่อดูข้อมูลเช่น ข้อมูลสถานที่จัดงาน ข้อมูลการติดต่อ อีกทั้งสามารถแสดงวีดีโอที่คุณต้องการให้เล่นบนหน้าการ์ดได้ผ่านแอพพลิเคชั้น Youry</p>
+                <p class="cwhite">ดาวน์โหลดได้ที่</p>
+                <router-link to="https://play.google.com"><img src="../assets/gplogo.png" style="width:30%;background-color:white;border-radius:5px;padding:5px;position:relative" alt=""></router-link>
+                <b-col>
+                  <img src="../assets/qrcode.jpeg" class="mt-3" style="width:25%;position:relative;margin-left:-10px">
+                </b-col>
+              </b-col>
+            </b-row>
+          </b-container>
+        </div>
+        <b-container >
+          <div class="work-area">
+            <div class="layout-area" >
+                <h3 class="center pt-3">เลือกจำนวนปุ่มที่จะแสดง</h3>
+              <div v-for="layout in layout" :key="layout.lid" class="box-on-layout" >
+                <img :src="layout.layoutImg" class="left layout-selected" >
+              <div class="layout-on" @click="active = layout.lid,layoutSet(layout)" :class="{layoutactive: active === layout.lid }">
+                <div class="text-on-layout" >{{layout.btn}}</div>
+              </div>
+              </div>
+            </div>
+            <div class="inputData-area" >
+              <div v-if="!image">
+                  <form ref="marker" class="input-none" enctype="multipart/form-data">
+                    <label for="markerUpload" class="box-upload mt-5 mb-5" style="display: flex; justify-content: center;">
+                      <h1 class="text-on-upload">
+                        <i class="fas fa-upload">
+                          <h5 class="fontth mt-2">Upload Marker</h5>
+                          <h5 class="fontth mt-2">(รูปการ์ดของคุณ)</h5>
+                        </i>
+                      </h1>
+                    </label>
+                    <input
+                      class="input-none"
+                      type="file"
+                      name="files"
+                      id="markerUpload"
+                      ref="markerUpload"
+                      @change="onFileChange"
+                    >
+                    </form>
+                    </div>
+              <div v-else>
+              <b-row >
+                <b-col>
+                    <div >
+                      <img :src="image" class="image-show" style="display: flex; justify-content: center;">
+                      <b-button class="mt-3 ml-3 mb-3 yr-button" @click="removeImage()">ลบ Marker</b-button>
+                    </div>
+                </b-col>
+                <b-col class="pr-4">
+                  <div v-if="image">
+                    <h4 class="mt-3 fontth">อัพโหลดวีดีโอ ที่จะแสดงบนAR</h4>
+                    <div v-if="!video">
+                      <form ref="videoShow" class="input-none" enctype="multipart/form-data">
+                        <label for="vdoUpload" class="button-upload mt-2" >
+                          <h5 class="text-on-btn-upload">
+                            <i class="fas fa-upload"></i>
+                          </h5>
+                        </label>
+                        <input
+                          class="input-none"
+                          type="file"
+                          name="vdo"
+                          id="vdoUpload"
+                          ref="vdoUpload"
+                          @change="onFileChangeToVideo"
+                        >
+                      </form>
+                    </div>
+                    <div v-else class="mb-5">
+                    <video width="100%" controls>
+                      <source :src="video" type="video/mp4">
+                    </video>
+                    <b-button @click="removeVideo" class="yr-button mt-2 mb-2">Remove Video</b-button>
+                  </div>
+                  <h4 class="corange">ปุ่มที่จะแสดง</h4>
+                  <div>
+                    <div >
+                      <!-- <b-form-select v-if="countBtn == 4||countBtn == 3||countBtn == 2||countBtn == 1" v-model="btnData1" :options="btnOnCard" class="mb-3 yr-select" >
+                        <template slot="first">
+                        <option :value="null" disabled>-- เลือกปุ่มที่ 1 --</option>
+                        </template>
+                      </b-form-select> -->
+                      <div>
+                        <h5 class="mb-2">Location</h5>
+                        <!-- <b-form-input class="mb-2" v-model="locationBtn" type="text" placeholder="Location ของคุณ"></b-form-input> -->
+                        <div class="mb-2 ">
+                        <GmapAutocomplete placeholder="โปรดเพิ่มตำแหน่งของคุณ" @place_changed="setLocation" class="location-input"></GmapAutocomplete>
+                        </div>
+                        <!-- <GmapAutocomplete placeholder="..." @place_changed="ชื่อฟังก์ชัน"></GmapAutocomplete> -->
+                           <GmapMap
+                            :center="currentLocation"
+                            :zoom="17"
+                            map-type-id="terrain"
+                            id="mapId"
+                            style="width: 500px; height: 300px"
+                          >
+                          <GmapMarker ref="mapMarker" :position="currentLocation"/>
+                          <!-- <GmapMarker ref="myMarker"
+                         :position="google && new google.maps.LatLng(13.923633, 100.536543)"/> -->
+                            <!-- <GmapMarker
+                              :clickable="true"
+                              :draggable="true"
+                            /> -->
+                          </GmapMap>
+                          <!-- <div class="geolocation" v-on:click="geolocation()">
+                            <img src="../../static/images/geolocation.png" />
+                          </div> -->
+                          <!-- <div class="search">
+                            <input type="text" v-model="searchAddressInput" v-on:change="searchLocation()">
+                          </div> -->
+                      </div>
+                      <div>
+                        <h5 class="mb-2">Contact</h5>
+                        <b-form-input class="mb-2" v-model="contactBtn" type="text" placeholder="การติดต่อ ของคุณ เช่นเบอร์โทรศัพท์"></b-form-input>
+                      </div>
+                      <div>
+                        <h5>Gallerys</h5>
+                        <form ref="gallerys" enctype="multipart/form-data">
+                          <!-- <label for="file-upload" class="button-upload mt-2">
+                                                  <h5 class="text-on-btn-upload"><i class="fas fa-upload"></i></h5>
+                                              </label>
+                          <input class="input-none " type="file" name="files" id="file-upload"  ref="file" multiple />-->
+                          <label class="button-upload input-none">
+                            <h5 class="text-on-btn-upload">
+                              <i class="fas fa-upload"></i>
+                            </h5>
+                            <input type="file" ref="gallerysData" name="gallerys[]" id="filesToUpload" @change="setDataGallerys" multiple="multiple">
+                          </label>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </b-col>
+              </b-row>
+              <b-container>
+                  <div class="mb-3">
+                        <h5>ข้อมูลความต้องการของคุณ</h5>
+                        <b-form-textarea id="textarea1"
+                     v-model="commentsData"
+                     placeholder="ข้อมูลความต้องการของคุณ เช่น ต้องการปุ่มแบบไหน รูปทรงของปุ่ม (ใส่ข้อมูลหรือไม่ใส่ก็ได้)"
+                     :rows="3"
+                     :max-rows="6">
+                    </b-form-textarea>
+                  </div>
+                <div>
+                  <b-button class="yr-button right" @click="checkInputData()">สั่งทำ</b-button>
+                        <!-- <b-button class="yr-button right">ยกเลิก</b-button> -->
+                  </div>
+              </b-container>
+              </div>
+            </div>
+          </div>
 
         </b-container>
       </div>
+
+      <b-modal ref="CheckData" hide-footer title="ตรวจสอบข้อมูล" size="lg">
+      <div>
+        <b-row>
+          <b-col>
+            <div class="bot-border mb-2"><h5>ราคาสร้างสรรค์งาน</h5></div>
+            <p>{{defaultPriceFormat}} บาท</p>
+            <div class="bot-border mb-2"><h5>รวมราคาปุ่ม</h5></div>
+            <p>{{cardBntPrice}} บาท</p>
+          </b-col>
+          <b-col>
+            <div class="bot-border mb-2"><h5>ราคาต่อปุ่ม</h5></div>
+            <p>500 บาท</p>
+            <div class="bot-border mb-2"><h5>รวม</h5></div>
+            <p>{{allPrice}} บาท</p>
+          </b-col>
+          <b-col>
+            <div class="bot-border mb-2"><h5>จำนวนปุ่ม</h5></div>
+            <p>{{countBtn}} ปุ่ม</p>
+          </b-col>
+        </b-row>
+        <p class="cred">*หมายเหตุ งานจะเริ่มดำเนินต่อเมื่อชำระเงินเสร็จสิ้น</p>
+        <b-button class="yr-button right ml-3" @click="createOrder()">ยืนยัน</b-button>
+        <b-button class="yr-button right bgblack" @click="cancel()">ยกเลิก</b-button>
+      </div>
+      </b-modal>
+       <b-modal ref="CheckLogin" hide-footer title="กรุณาเข้าสู่ระบบ" size="lg">
+      <div>
+        <Signin></Signin>
+      </div>
+    </b-modal>
+    <b-modal ref="reData" title="อัพโหลดข้อมูลใหม่อีกครั้ง">
+      <h3>กรุณาอัพโหลดข้อมูลใหม่อีกครั้ง</h3>
+    </b-modal>
+
     <div class="vld-parent">
         <loading :active.sync="isLoading"
         :can-cancel="false"
@@ -68,31 +234,61 @@
   </div>
 
 </template>
-
-<script>
+<script >
 /* eslint-disable */
 
+import Signin from '@/components/Signin'
 import Loading from 'vue-loading-overlay';
 import FreeTransform from 'vue-free-transform'
+import {gmapApi} from 'vue2-google-maps'
+import VueGoogleAutocomplete from "vue-google-autocomplete";
+
+var numeral = require('numeral');
 const axios = require('axios');
   export default {
     props: ["Layouts"],
     name: 'app',
     components: {
       FreeTransform,
+      Signin,
       Loading,
+      VueGoogleAutocomplete
     },
     data() {
       return {
+        locationName: '',
+        currentLocation : { lat : 13.923633, lng : 100.536543},
+        latlong: '',
+        searchAddressInput: '',
+        cardBntPrice: 500,
+        defaultPrice: 2000,
+        defaultPriceFormat: '',
+        active: '1',
+        countBtn: '1',
+        btnCard: null,
+        btnData1: null,
+        btnData2: null,
+        btnData3: null,
+        btnData4: null,
+        gallerytBtn: '',
+        contactBtn: '',
+        locationBtn: '',
+        ShareBtn: '',
+        video: '',
+        video2: '',
+        allPrice: '',
+        videoData: '',
+        markerData: '',
+        gallerys: [],
         userData: '',
         slide: 0,
-      sliding: null,
+        sliding: null,
         file : '',
+        commentsData: '',
+        layoutImgData: require('../assets/layout/lv2_1.png'),
         themeSelection: false,
         selecttionItem: null,
         passData: this.layouts,
-        elements: [
-        ],
         inputMarker: [],
         image: '',
         imageType: '',
@@ -100,36 +296,61 @@ const axios = require('axios');
         videoData:'',
         isLoading: false,
         chackUpload: false,
-        textIn: "",
-        text: '',
-        my2: '',
         myFormData: '',
-        arBtSelect:[],
-        arButtonItem: [
+        btnOnCard: [
+          // { 
+          //   text: 'เลือกปุ่ม',
+          //   value: null
+          // },
           {
-            arbName:'location',
-            value: 'location'
+            text:'location',
+            value: 'location',
+            btnModel: ''
           },
           {
-            arbName: 'gallery',
-            value: 'gallery'
+            text: 'gallery',
+            value: 'gallery',
+            btnModel: ''
           },
           {
-            arbName: 'contact',
-            value: 'contact'
+            text: 'contact',
+            value: 'contact',
+            btnModel: ''
           },
-          {
-            arbName: 'freebutton',
-            value: 'freebutton'
-          }
         ],
-        themeItem: [
+        layout: [
           {
-            themeName: 'VINTAGE',
-            themeTag: 'vintage',
-            themeDetail: 'เหมยเฮียแชมพูสป็อต เซ็นทรัลอ่อนด้อยอีโรติก รีดไถเทค ออสซี่ เทียมทานครูเสดเซ็นทรัล ออทิสติกฟีดตนเองติ๋มฟินิกซ์สตาร์มิลค์ เคลมไวกิ้งเซรามิกนายพราน มะกัน รากหญ้า ซัพพลายเออร์ซูเอี๋ยติ๋มแจ๊กพอตเมจิก คอนเซ็ปต์ ไอซ์ รีไซเคิลโซนี่',
-            themepic: require('../assets/theme/vintage.jpg'),
-            themeEx: [{
+            layoutImg: require('../assets/layout/lv2_1.png'),
+            lid: '1',
+            value: '1',
+            btn: '1 Button',
+            btnPrice: 500
+          },
+          {
+            layoutImg: require('../assets/layout/lv2_2.png'),
+            lid: '2',
+            value: '2',
+            btn: '2 Button',
+            btnPrice: 1000
+          },
+          {
+            layoutImg: require('../assets/layout/lv2_3.png'),
+            lid: '3',
+            value: '3',
+            btn: '3 Button',
+            btnPrice: 1500
+          },
+          {
+            layoutImg: require('../assets/layout/lv2_5.png'),
+            lid: '4',
+            value: '4',
+            btn: '4 Button',
+            btnPrice: 2000
+          },
+          
+        ],
+        exampleDesign: [
+          {
               ex: require('../assets/theme/1-ex/ex1.png'),
             },
             {
@@ -138,52 +359,101 @@ const axios = require('axios');
             {
               ex: require('../assets/theme/1-ex/ex3.png'),
             }
-
-            ]
-              
-          },
-          {
-            themeName: 'MODERN',
-            themeTag: 'modern',
-            themeDetail: 'เหมยเฮียแชมพูสป็อต เซ็นทรัลอ่อนด้อยอีโรติก รีดไถเทค ออสซี่ เทียมทานครูเสดเซ็นทรัล ออทิสติกฟีดตนเองติ๋มฟินิกซ์สตาร์มิลค์ เคลมไวกิ้งเซรามิกนายพราน มะกัน รากหญ้า ซัพพลายเออร์ซูเอี๋ยติ๋มแจ๊กพอตเมจิก คอนเซ็ปต์ ไอซ์ รีไซเคิลโซนี่',
-            themepic: require('../assets/theme/modern.jpg')
-          },
-          {
-            themeName: 'BLACK AND WHITE',
-            themeTag: 'bandw',
-            themeDetail: 'เหมยเฮียแชมพูสป็อต เซ็นทรัลอ่อนด้อยอีโรติก รีดไถเทค ออสซี่ เทียมทานครูเสดเซ็นทรัล ออทิสติกฟีดตนเองติ๋มฟินิกซ์สตาร์มิลค์ เคลมไวกิ้งเซรามิกนายพราน มะกัน รากหญ้า ซัพพลายเออร์ซูเอี๋ยติ๋มแจ๊กพอตเมจิก คอนเซ็ปต์ ไอซ์ รีไซเคิลโซนี่',
-            themepic: require('../assets/theme/bandw.jpg')
-          },
-          {
-            themeName: 'GARDEN PARTY',
-            themeTag: 'garden',
-            themeDetail: 'เหมยเฮียแชมพูสป็อต เซ็นทรัลอ่อนด้อยอีโรติก รีดไถเทค ออสซี่ เทียมทานครูเสดเซ็นทรัล ออทิสติกฟีดตนเองติ๋มฟินิกซ์สตาร์มิลค์ เคลมไวกิ้งเซรามิกนายพราน มะกัน รากหญ้า ซัพพลายเออร์ซูเอี๋ยติ๋มแจ๊กพอตเมจิก คอนเซ็ปต์ ไอซ์ รีไซเคิลโซนี่',
-            themepic: require('../assets/theme/garden.jpg')
-          }
-        ]
+        ],
       }
     },
+    computed: {
+    google: gmapApi
+  },
     created(){
-      // console.log(this.Layouts)
-      // var querystring = require('querystring');
-
-
-        
-      // axios.get('http://fishyutt.xyz/dev/admin/files/api/query_theme.php')
-      //     .then((result) => {
-      //       console.log('555555555555555555555555555555')
-      //       console.log(result)
-            
-      //     })
-      //     .catch((error) => {
-      //       console.log(error.response)
-      //     })
     },
     mounted() {
+      
+      // console.log(google)
+    //   map.addListener('click', function(e) {
+    // placeMarker(e.latLng, map);
+    //   });
+
+      
       // const getUserData = this.$session.get('sessionData')
       //  this.userData = getUserData[0]
     },
     methods: {
+      initMap() {
+        var map = new google.maps.Map(document.getElementById('mapId'), {
+          zoom: 4,
+          center: {lat: -25.363882, lng: 131.044922 }
+        });
+
+        map.addListener('click', function(e) {
+          placeMarkerAndPanTo(e.latLng, map);
+        });
+      },
+      placeMarkerAndPanTo(latLng, map) {
+        var marker = new google.maps.Marker({
+          position: latLng,
+          map: map
+        });
+        map.panTo(latLng);
+      },
+
+      
+      placeMarker(position, map) {
+          var marker = new google.maps.Marker({
+              position: position,
+              map: map
+          });
+          map.panTo(position);
+      },
+      setLocation(place){
+        // console.log('place', place.formatted_address + '' + place.geometry.location.lat() + '' +place.geometry.location.lng())
+        this.currentLocation.lat = place.geometry.location.lat();
+        this.currentLocation.lng = place.geometry.location.lng();
+        this.latlong =  this.currentLocation.lat+','+this.currentLocation.lng;
+        this.locationName = place.formatted_address
+        console.log('place',place.formatted_address)
+      },
+      // initMap() {
+      //   var map = new google.maps.Map(document.getElementById('map'), {
+      //     zoom: 4,
+      //     center: {lat: -25.363882, lng: 131.044922 }
+      //   });
+
+      //   map.addListener('click', function(e) {
+      //     placeMarkerAndPanTo(e.latLng, map);
+      //   });
+      // },
+      // placeMarkerAndPanTo(latLng, map) {
+      //   var marker = new google.maps.Marker({
+      //     position: latLng,
+      //     map: map
+      //   });
+      //   map.panTo(latLng);
+      // },
+
+    //   geolocation : function() {
+    //   navigator.geolocation.getCurrentPosition((position) => {
+    //     this.currentLocation = {
+    //       lat: position.coords.latitude,
+    //       lng: position.coords.longitude
+    //     };
+    //   });
+    // },
+    // searchLocation: function() {
+    //   var geocoder = new google.maps.Geocoder();
+    //   geocoder.geocode({'address': this.searchAddressInput}, (results, status) => {
+    //     if (status === 'OK') {
+    //       this.currentLocation.lat = results[0].geometry.location.lat();
+    //       this.currentLocation.lng = results[0].geometry.location.lng();
+    //     }
+    //   });
+    // },
+      layoutSet(data){
+        this.layoutImgData = data.layoutImg
+        this.cardBntPrice  = data.btnPrice
+        this.countBtn = parseInt(data.value)
+        console.log(data)
+      },
       onSlideStart (slide) {
       this.sliding = true
     },
@@ -191,10 +461,10 @@ const axios = require('axios');
       this.sliding = false
     },
     onFileChange(e) {
+      this.markerData = this.$refs.markerUpload.files[0];
     //   this.markerData = new FormData(this.$refs.marker);
     // this.markerData = e.target.files[0]
-    this.myFormData = new FormData(this.$refs.myForm)
-    // console.log('1111'+this.myFormData)
+    // this.markerData = document.getElementById('marker-upload').files[0]
       var files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       this.createImage(files[0]);
@@ -211,179 +481,110 @@ const axios = require('axios');
         };
         reader.readAsDataURL(file);
         this.isLoading = false;
-      }, 500);
+      }, 300);
     },
     removeImage: function(e) {
-      this.image = "";
+      this.isLoading = true
+      setTimeout(() => {
+          this.image = "";
+          this.isLoading = false
+        },200)
+      
     },
-      go(){
-        this.isLoading = true
-        var myFormData2 = new FormData(this.$refs.my2)
-        var querystring = require('querystring');
-        // console.log('*******************'+this.formData2+'**********************')
-        var chackEP = querystring.stringify({
-          files: this.myFormData,
-          vdo: this.myFormData2
-        });
+    onFileChangeToVideo(e) {
+        // this.videoData = e.target.files[0]
+        this.videoData = this.$refs.vdoUpload.files[0];
+        // this.videoData = document.getElementById('vdo-upload').files[0]
+      // this.videoData = new FormData(this.$refs.video)
+      console.log('videoData----'+this.videoData)
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createVideo(files[0]);
+    },
+    createVideo(file) {
+      var video = new Image();
+      var reader = new FileReader();
+      var vm = this;
 
-        console.log(this.myFormData)
-        axios({
-                  method: 'post',
-                  url: 'http://fishyutt.xyz/dev/admin/files/api/orders_api/insert_order_card.php',
-                  data: this.chackEP,
-                  config: { headers: {'Content-Type': 'multipart/form-data' }}
-              }).then((result) => {
-              console.log(result)
-              console.log('sccess')
-              this.isLoading = false
-          })
-          .catch((error) => {
-            // Do somthing
-            this.isLoading = false
-            console.log(error)
-            console.log(error.response)
-          })
-      },
+      reader.onload = e => {
+        vm.video = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+    removeVideo: function(e) {
+      this.video = "";
+    },
+    setDataGallerys(){
+        this.gallerys = this.$refs.gallerysData.files;
+        console.log(this.gallerys)
+    },
       selectTheme(data){
         this.themeSelection = true
         this.selecttionItem = data
         console.log(this.selecttionItem)
       },
-      close: function (elements) {
-
-        // delete this.elements[0]
-        this.elements = []
-
+      checkInputData(){
+      if(this.$session.get('session') == true){
+        this.cardBntPrice = parseInt(this.cardBntPrice)
+        this.allPrice = this.cardBntPrice+this.defaultPrice
+        console.log(this.allPrice)
+        var c = numeral(this.allPrice).format('0,0')
+        var d = numeral(this.defaultPrice).format('0,0')
+        this.allPrice = c
+        this.defaultPriceFormat = d
+        this.$refs.CheckData.show()
+        }else{
+        this.isLoading = false
+        this.$refs.CheckLogin.show()
+      }
       },
-      // onFileChange(e) {
-      //   this.isLoading = true
-      //   // console.log(e)
-      //   var files = e.target.files ;
-      //   this.videoData = files;
-      //   console.log(this.videoData)
-      //   if (!files.length)
-      //     return;
+      cancel(){
+        this.$refs.CheckData.hide()
+      },
+    createOrder(){
+      // var userData = this.$session.getAll()
+      this.$refs.CheckData.hide()
+        this.isLoading = true
+        const getUserData = this.$session.get('sessionData')
+        this.allPrice = this.cardBntPrice+this.defaultPrice
+        this.userData = getUserData[0]
+        var theData = new FormData();
+        theData.append('user_id',this.userData.user_id);
+        theData.append('layout_id',this.countBtn);
+        theData.append('location',this.locationName);
+        theData.append('latlong',this.latlong)
+        theData.append('contact',this.contactBtn);
+        theData.append('price',this.allPrice);
+        theData.append('orther',this.commentsData);
+        theData.append('files',this.markerData);
+        theData.append('vdo',this.videoData);
+        for( var i = 0; i < this.gallerys.length; i++ ){
+          let file = this.gallerys[i];
 
-      //   this.createImage(files[0]);
-        
-
-      // },
-      // createImage(file) {
-        
-      //   var image = new Image();
-      //   var reader = new FileReader();
-      //   var vm = this;
-        
-      //   reader.onload = (e) => {
-      //     vm.image = e.target.result;
-      //     // vm.imageType = e;
-      //     // console.log(vm.image.naturalWidth)
-      //   };
-      //   reader.readAsDataURL(file);
-      //   this.imageType = document.getElementById('markerFile');
-      //   this.chackUpload = true
-      //   // this.videoData = this.image;
-      //   // console.log(vm.image.width  )
-      //        setTimeout(() => {
-      //       this.isLoading = false
-      // },2000)
-      //   console.log('---------------------')
-      // },
-      // removeImage: function (e) {
-      //   this.image = '';
-      //   this.elements = []
-      //   this.chackUpload = false
-      //   // this.$forceUpdate();
-      // },
-      
-      success(){
-         $("form").submit(function(evt){	 
-           console.log('55555555555555555555555555555555555555555555')
-      evt.preventDefault();
-      var formData = new FormData($(this)[0]);
-      
-        // this.$router.push({name:'ChackOrder',params:{dataChack: this.elements, dataChack2:this.inputMarker} })
-        // var filess = document.getElementById('files');
-        this.isLoading = true;
-        var querystring = require('querystring');
-        // var filesData = document.getElementById('filesData')
-        // console.log("-----------------"+filesData)
-        var chackEP = querystring.stringify({
-          files : formData,
-        });
-        const config = {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
+          theData.append('gallerys[' + i + ']', file);
         }
-        
-        axios.post('http://fishyutt.xyz/dev/admin/files/api/orders_api/insert_order_card.php', chackEP, config)
-          .then((result) => {
+      
+      axios({
+                  method: 'post',
+                  url: 'http://fishyutt.xyz/dev/admin/files/api/orders_api/insert_order_card.php',
+                  data: theData,
+                  config: { headers: {'Content-Type': 'multipart/form-data' }}
+              })
+              .then((result) => {
               console.log(result)
               console.log('sccess')
-              // console.log(this.videoData)
-              // this.$router.push( {name:'Home'})
+              this.$router.push( {name:'OrderBill',params: { orderData: result.data}})
               this.isLoading = false
-              // this.$router.push('http://fishyutt.xyz/api/youry/uploads.php' )
-              // window.open('http://fishyutt.xyz/api/youry/uploads.php', '_blank');
-              
-              // window.open("http://fishyutt.xyz/api/youry/uploads.php");
           })
           .catch((error) => {
-            // Do somthing
+            console.log('dataerror--------'+error)
             this.isLoading = false
-            console.log(error.response)
+            this.$refs.reData.show()
+            
           })
-        // document.getElementById('input').files[0]
-        // console.log('---------------------'+e)
-        // this.$router.push( {name:'ChackOrder',params: { imgData: this.image,imageType:myFile}})
-      })},
-      // reset(){
-      //   this.elements = []
-      // },
-      // goPayment(){
-      //   this.$router.push( {name:'Payment',params: { imgResult: this.image}})
-      // }
-      next(){
-        this.isLoading = true
-      //   var myFormData = new FormData(this.$refs.myForm)
-      //   // console.log(myFormData)
-      //  var querystring = require('querystring');
-      //   var chackEP = querystring.stringify({
-      //   //   order_id: '',
-      //       user_id: this.userData.User_id,
-      //       order_type: '2',
-      //       theme_id : '2'
-
-      //   //   User_password: this.password,
-      //   });
-
-      //   const config = {
-      //     headers: {
-      //       'Content-Type': 'application/x-www-form-urlencoded'
-      //     }
-      //   }
-      //   axios.post('http://fishyutt.xyz/dev/admin/files/api/orders_api/create_order.php', chackEP, config)
-      //     .then((result) => {
-
-      //       const data = result.data
-      //       console.log('data-------------'+result)
-      //       console.log('data-------------'+data)
-      //       this.isLoading = false
-      //     })
-      //     .catch((error) => {
-      //       console.log('dataerror--------'+error.response)
-      //       this.isLoading = false
-      //     })
-        setTimeout(() => {
-          this.$router.push( {name:'OrderCreate',params: { themeResult: this.selecttionItem}})
-                  this.isLoading = false
-        },500)
-        
-      },
-      back(){
-        this.themeSelection = false
-      }
+       
+    },
+    
     }
   }
 
@@ -394,6 +595,9 @@ const axios = require('axios');
     display: flex;
     background: #F8FAFC;
   }
+   #map {
+        height: 100%;
+      }
 
   .wrapper {
     flex: 1;
@@ -412,77 +616,6 @@ const axios = require('axios');
 
   * {
     box-sizing: border-box;
-  }
-
-  .tr-transform__content {
-    user-select: none;
-  }
-
-  .tr-transform__rotator {
-    top: -45px;
-    left: calc(50% - 7px);
-  }
-
-  .tr-transform__rotator,
-  .tr-transform__scale-point {
-    background: #fff;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    position: absolute;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-  }
-
-  .tr-transform__rotator:hover,
-  .tr-transform__scale-point:hover {
-    background: #F1F5F8;
-  }
-
-  .tr-transform__rotator:active,
-  .tr-transform__scale-point:active {
-    background: #DAE1E7;
-  }
-
-  .tr-transform__scale-point--tl {
-    top: -7px;
-    left: -7px;
-  }
-
-  .tr-transform__scale-point--ml {
-    top: calc(50% - 7px);
-    left: -7px;
-  }
-
-  .tr-transform__scale-point--tr {
-    left: calc(100% - 7px);
-    top: -7px;
-  }
-
-  .tr-transform__scale-point--tm {
-    left: calc(50% - 7px);
-    top: -7px;
-  }
-
-  .tr-transform__scale-point--mr {
-    left: calc(100% - 7px);
-    top: calc(50% - 7px);
-  }
-
-  .tr-transform__scale-point--bl {
-    left: -7px;
-    top: calc(100% - 7px);
-  }
-
-  .tr-transform__scale-point--bm {
-    left: calc(50% - 7px);
-    top: calc(100% - 7px);
-  }
-
-  .tr-transform__scale-point--br {
-    left: calc(100% - 7px);
-    top: calc(100% - 7px);
   }
 
   .upload-file {

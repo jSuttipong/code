@@ -3,13 +3,14 @@
         <b-container>
             <div class="order-space fontth mb-5">
                 <h1 class="center mt-5">Your Order</h1>
-                <div class="textName">คุณ {{userData.fname}} {{userData.lname}}</div>
-                <div><p>เบอร์โทร : {{userData.mobile}}</p></div>
+                <div class="textName">คุณ {{userData.user_fname}} {{userData.user_lname}}</div>
+                <div><p>เบอร์โทร : {{userData.user_mobile}}</p></div>
                 <div style="width:100%;height:50px"><b-button class="yr-button order-btn">Order ทั้งหมด</b-button></div>
                 <vue-good-table
                 :columns="columns"
                 :search-options="{
-                    enabled: true
+                    enabled: true,
+                    initialSortBy: {field: 'orderId',type: 'asc'}
                 }"
                 :pagination-options="{
                     enabled: true,
@@ -17,7 +18,11 @@
                     perPageDropdown: [5, 10],
                 }"
                 @on-row-click="onRowClick"
-                :rows="rows"/>
+                :rows="rows">
+                <div slot="emptystate">
+                    ยังไม่มีข้อมูล
+                </div>
+                </vue-good-table>
                 <div class="vld-parent">
         <loading :active.sync="isLoading"
         :can-cancel="false"
@@ -28,16 +33,74 @@
         </div>
             </div>
             <!-- Modal Component -->
-            <b-modal v-model="showData" size="lg" centered title="รายการ">
-                <h3>Order ID : {{passData.orderId}}</h3>
-                <h5>ประเภท : {{passData.orderType}}</h5>
-                <h5>ราคา : {{passData.price}}</h5>
-                <h5>สถานะ : {{passData.status}}</h5>
-                <div v-for="item in imgData" :key="item">
+            <b-modal v-model="showData" size="lg" centered :title="'รายการที่ '+passData.orderId" class="fontth">
+                <b-container>
+                    <b-row>
+                        <b-col>
+                            <div class="bot-border mb-2"><h5>ประเภท</h5></div>
+                            <p>{{passData.orderType}}</p>
+                            <div class="bot-border mb-2"><h5>วันที่สร้าง</h5></div>
+                            <p>{{dateShow}}</p>
+                        </b-col>
+                        <b-col>
+                            <div class="bot-border mb-2"><h5>ราคา</h5></div>
+                            <p>{{passData.price}}</p>
+                            <div class="bot-border mb-2"><h5>Location</h5></div>
+                            <p>{{cardDetail.card_detail_location}}</p>
+                        </b-col>
+                        <b-col>
+                            <div class="bot-border mb-2"><h5>สถานะ</h5></div>
+                            <p>{{passData.status}}</p>
+                            <div class="bot-border mb-2"><h5>Contact</h5></div>
+                            <p>{{cardDetail.card_detail_contact}}</p>
+                            <!-- this.passData -->
+                            <!-- {{passData.marker.marker_img}} -->
+                            <div v-if="passData.status == 'ยังไม่ชำระเงิน'">
+                        <b-button class="yr-button right" @click="goPayment()">ชำระเงิน</b-button>
+                    </div>
+                        </b-col>
+                    </b-row>
+                    <div>
+                        <div class="bot-border mb-2"><h5>ข้อมูลเพิ่มเติม</h5></div>
+                        <div v-if="cardDetail.card_detail_other == ''"><p >ไม่มีการส่งรายละเอียดที่ต้องการเพิ่มเติม</p></div>
+                        <div v-else><p>{{cardDetail.card_detail_other}}</p></div>
+                    </div>
+                    <b-row>
+                        <b-col>
+                            <h5>รูป marker</h5>
+                            <img :src="imgUrl" style="width:100%;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.10);border: 1px solid rgba(0, 0, 0, 0.10);">
+                        </b-col>
+                        <b-col>
+                            <h5 class="mb-5">Video บนการ์ด</h5>
+                            <iframe width="100%" height='200px' controls
+                            :src="vdoUrl">
+                            </iframe>
+                        </b-col>
+                    </b-row>
+                    <div>
+                        <h5 class="mt-3">รูป Gallerys</h5>
+                        <div v-for="galleriesData in passData.galleries" :key='galleriesData.gallery_url' style="width:100%; height:auto">
+                            <img :src="galleriesData.gallery_url" class="left" style="width:20%;height:120px;margin: 5px">
+                        </div>
+                    </div>
+                </b-container>
+                <!-- <div>
+                    <h5>ประเภท : {{passData.orderType}}</h5>
+                    <h5>ราคา : {{passData.price}}</h5>
+                    <h5>สถานะ : {{passData.status}}</h5>
+                </div> -->
+                <!-- <div v-for="item in imgData" :key="item">
                     <img :src="item.markerPath" alt="" class="left mr-3 ml-3 mt-3" style="width:200px;height:130px">
                     <video width="50%" controls>
                             <source :src="item.videoPath" type="video/mp4">
                           </video>
+                </div> -->
+                <div>
+                    <!-- {{imgData}} -->
+                    <!-- <video width="50%" controls>
+                            <source :src="passData.video" type="video/mp4">
+                    </video> -->
+                    <!-- {{passData.status}} -->
                 </div>
                 <!-- {{passData}} -->
             </b-modal>
@@ -46,6 +109,7 @@
 </template>
 <script>
 /* eslint-disable */
+const moment = require('moment');
 import Loading from 'vue-loading-overlay';
 var numeral = require('numeral');
 const axios = require('axios');
@@ -56,10 +120,17 @@ export default {
         },
     data(){
         return{
+            colorText: '',
+            dateShow: '',
+            imgUrl: '',
+            vdoUrl:'',
             showData: false,
             passData: '',
             userData: '',
+            textAlert: '',
             imgData: [],
+            galleryData: [],
+            cardDetail: '',
              columns: [
         {
           label: 'Order ID',
@@ -68,13 +139,14 @@ export default {
         {
           label: 'รายการ',
           field: 'orderType',
+          sortable: false,
         },
         {
           label: 'Created On',
           field: 'createdAt',
           type: 'date',
-          dateInputFormat: 'YYYY-MM-DD h:mm:ss7',
-          dateOutputFormat: 'DD MMM YYYY h:mm:ss',
+          dateInputFormat: 'YYYY-MM-DD ',
+          dateOutputFormat: 'DD MMM YYYY',
         },
         {
           label: 'ราคา',
@@ -86,19 +158,19 @@ export default {
           field: 'status',
         },],
          rows: [],
+         allData: '',
       isLoading: false
         }
     },
     mounted(){
         this.isLoading = true;
-    //    const getUserData = this.$session.get('sessionData')
-    //    this.userData = getUserData[0]
-    //    console.log('--------'+this.$session.get('sessionData'))
+       const getUserData = this.$session.get('sessionData')
+       this.userData = getUserData[0]
+       console.log(this.userData)
         var querystring = require('querystring');
         var chackEP = querystring.stringify({
-            user_id: '4'
-        //   user_id: this.userData.User_id,
-        //   User_password: this.password,
+            user_id: this.userData.user_id
+
         });
 
         const config = {
@@ -106,12 +178,12 @@ export default {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
-        var theData = new FormData();
-        theData.append('user_id','4');
-        var rawData = {
-            user_id: '4',
-        }
-        rawData = JSON.stringify(rawData) 
+        // var theData = new FormData();
+        // theData.append('user_id','4');
+        // var rawData = {
+        //     user_id: 'this.userData',
+        // }
+        // rawData = JSON.stringify(rawData) 
         // axios({
         //           method: 'post',
         //           url: 'http://fishyutt.xyz/dev/admin/files/api/users_api/order_user_detail.php',
@@ -125,50 +197,44 @@ export default {
 //     }
 //   })
           .then((result) => {
-            console.log(result)
-            console.log(result.data)
-            const data = result.data
-            console.log(data.length)
-            for (var i = 0; i < data.length; i++) { 
-                this.rows.push({orderId:data[i].order_id,
-            orderType:data[i].order_type,
-            createdAt: data[i].order_date,
-            price: data[i].order_price,
-            status: data[i].order_status})
-            }
-
-            // for (var i = 0; i < data.length; i++) { 
-            //     this.imgData.push({markerPath:data[i].marker.marker_img,
-            //     videoPath:data[i].marker.marker_vdo,
-            // })
-            // }
-            // console.log(this.rows)
-
-            // console.log(this.rows)
-            // console.log(this.rows[0].orderType)
-            // if(){
-
-            // }
+                console.log(result)
+                const data = result.data
+                this.allData = result.data
+                for (var i = 0; i < data.length; i++) { 
+                    this.rows.push({orderId:data[i].order_id,
+                orderType:data[i].order_type,
+                createdAt: data[i].order_date,
+                price: data[i].order_price,
+                status: data[i].order_status,
+                comment_admin: data[i].comment_admin,
+                comment_user: data[i].comment_user,
+                galleries: data[i].galleries,
+                marker: data[i].marker,
+                cardDetail: data[i].card_detail})
+                }
+            
              for (var i = 0; i < data.length; i++) { 
                 if(this.rows[i].orderType == 0){
                     this.rows[i].orderType = "โฟโต้บุ๊ค"
                 }else this.rows[i].orderType = "การ์ด";
             }
             for (var i = 0; i < data.length; i++) { 
-                if(this.rows[i].status == 0){
-                    this.rows[i].status = "ยังไม่จ่ายเงิน"
-                }else if(this.rows[i].status == 1){
-                    this.rows[i].status = "จ่ายเงินแล้ว"
+                if(this.rows[i].status == 1){
+                    this.rows[i].status = "ยังไม่ชำระเงิน"
+                    this.colorText = 'cred'
                 }else if(this.rows[i].status == 2){
-                    this.rows[i].status = "กำลังดำเนินการ"
+                    this.rows[i].status = "ชำระเงินแล้ว"
+                }else if(this.rows[i].status == 3){
+                    this.rows[i].status = "อยู่ในระหว่างดำเนินการ"
                 }else this.rows[i].status = "เสร็จสิ้น"
             }
             
-            // for (var i = 0; i < data.length; i++) { 
-            //     var c = numeral(this.rows[i].price).format('0,0')
-            //     this.rows[i].price = c
+            for (var i = 0; i < data.length; i++) { 
+                var c = numeral(this.rows[i].price).format('0,0')
+                 this.rows[i].price = c
+                // return c
                 
-            // }
+            }
         // if(this.rows.orderType == 0){
         //     return 'โฟโต้บุ๊ค'
         // }else return 'การ์ด';
@@ -186,15 +252,28 @@ export default {
     },
     methods:{
         onRowClick(params) {
-            this.isLoading = true;
+            // this.isLoading = true;
+            
             this.showData=true
             this.passData = params.row
-            this.imgData= []
-             var querystring = require('querystring');
-        var chackEP = querystring.stringify({
-          order_id: this.passData.orderId,
-        //   User_password: this.password,
-        });
+            console.log(this.passData.marker)
+            this.cardDetail = this.passData.cardDetail
+            this.imgUrl = this.passData.marker.marker_img
+            this.vdoUrl = this.passData.marker.marker_vdo
+             console.log(this.passData.galleries)
+            // for (let index = 0; index < this.passData.length; index++) {
+            //     this.galleryData.push(this.passData[index].galleries)   
+            // }
+            // console.log('5555'+this.passData.marker)
+            moment.locale('th')
+            this.dateShow = moment(this.passData.createdAt).format("D MMMM YYYY")
+            // console.log(this.passData)
+            // this.imgData= []
+        //      var querystring = require('querystring');
+        // var chackEP = querystring.stringify({
+        //   order_id: this.passData.orderId,
+        // //   User_password: this.password,
+        // });
 
         const config = {
           headers: {
@@ -202,25 +281,28 @@ export default {
           }
         }
         // axios.post('http://fishyutt.xyz/dev/admin/files/api/users_api/order_user_detail.php', chackEP, config)
-          .then((result) => {
-            // console.log(result.data)
-            // this.imgData.push(result.data)
-            // console.log(this.imgData)
-            const data = result.data
-            // console.log(data)
-            for (var i = 0; i < data.length; i++) { 
-                this.imgData.push({markerPath:data[i].marker_img,
-                videoPath:data[i].marker_vdo,
-            })
-            }
-            // console.log(this.imgData)
-            this.isLoading = false
-          })
-          .catch((error) => {
-            console.log(error.response)
-            this.isLoading = false
-          })
+        //   .then((result) => {
+        //     // console.log(result.data)
+        //     // this.imgData.push(result.data)
+        //     // console.log(this.imgData)
+        //     const data = result.data
+        //     // console.log(data)
+        //     for (var i = 0; i < data.length; i++) { 
+        //         this.imgData.push({markerPath:data[i].marker_img,
+        //         videoPath:data[i].marker_vdo,
+        //     })
+        //     }
+        //     // console.log(this.imgData)
+        //     this.isLoading = false
+        //   })
+        //   .catch((error) => {
+        //     console.log(error.response)
+        //     this.isLoading = false
+        //   })
   },
+  goPayment(){
+      this.$router.push( {name:'Payment',params: { orderId: this.passData.orderId}})
+  }
     }
      }
 </script>

@@ -1,15 +1,32 @@
 <template>
 <div >
     <b-container class="fontth">
-    <h1 class="mt-5 mb-5">เลือกสินค้าของคุณ</h1>
-    <div v-for=" product in productList" :key="product.pName" style="height:200px;width:300px" class="left mr-5">
-        <div class="">
-          <router-link :to="product.pLink" ><img :src="product.pImg" style="width:300px; height:200px;position:relative;" class="mb-5 product-select item" v-b-tooltip.hover :title="product.pName">
+      <h1 class="mt-4 mb-5 center">เลือกสินค้าของคุณ</h1>
+      <div>
+        <b-row>
+          <b-col>
+          <router-link :to="productList[0].pLink">
+          <div class="product-box">
+          <img :src="productList[0].pImg" class="mb-5 product-select" v-b-tooltip.hover :title="productList[0].pName">
+          <div class="product-hide-box">
+                    <div class="text-on-product" ><h1>Card</h1></div>
+                  </div>
+            </div>
           </router-link>
-        </div>
-    </div>
+          </b-col>
+          <b-col>
+            <router-link :to="productList[1].pLink" >
+            <div class="product-box">
+            <img :src="productList[1].pImg" class="mb-5 product-select " v-b-tooltip.hover :title="productList[1].pName">
+            <div class="product-hide-box">
+                    <div class="text-on-product" ><h1>Photobook</h1></div>
+              </div>
+            </div>
+          </router-link>
+          </b-col>
+        </b-row>
+      </div>
     </b-container>
-    <div style="height:519px"></div>
     </div>
 </template>
 
@@ -26,15 +43,11 @@ export default {
             pImg: require('../assets/product/card.png'),
             pLink: '/Create'
           },
-          // {
-          //   pName: 'NolmalPhoto',
-          //   pImg: require('../assets/product/normal.png'),
-          //   pLink: '/'
-          // },
+
           {
-            pName: 'Premium',
-            pImg: require('../assets/product/premium.jpeg'),
-            pLink: ''
+            pName: 'Photobook',
+            pImg: require('../assets/product/photobook.jpg'),
+            pLink: '/CreatePhotobook'
           },]
     }
   }
@@ -42,22 +55,24 @@ export default {
 </script>
 
 <style>
-.product-select{
+/* .product-select{
   border-radius: 10px;
-  background-color: #333333
-}
-.item{
-  width: 400px;
-  height: 300px;
-  z-index: 5;
-}
-.item:hover{
-  border-radius: 10px;
-  width: 300px;
-  height: 200px;
   background-color: #333333;
+  opacity: 1;
   z-index: 1;
-}
+} */
+/* .product-select:hover {
+  opacity: 0.5;
+  background-color: #333333;
+  z-index: 2 !important;
+} */
+
+/* .item:hover{
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+} */
 .overlay {
   position: absolute;
   top: 0;

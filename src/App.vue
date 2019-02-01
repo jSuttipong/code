@@ -3,16 +3,16 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
       crossorigin="anonymous">
     <b-navbar toggleable="md" type="dark" variant="info" style="box-shadow: 0px 1px 6px #888888; position:fixed;z-index:5 !important ; width:100%">
-      <b-container>
-        <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+      <b-container style="padding-top:0;padding-bottom:5px">
+        <!-- <b-navbar-toggle target="nav_collapse"></b-navbar-toggle> -->
         <b-navbar-brand >
-          <router-link to="/"><img src="./assets/logo.png" height="50" width="auto" /></router-link>
+          <router-link to="/"><img src="./assets/logo.png" style="height:50px;"/></router-link>
         </b-navbar-brand>
         <b-collapse is-nav id="nav_collapse" class="fontth">
-          <router-link to="/Home" class="mr-3">หน้าแรก </router-link>
+          <router-link to="/" class="mr-3">หน้าแรก </router-link>
           <router-link to="/Product" class="mr-3">สินค้า </router-link>
-          <router-link to="/Home" class="mr-3">ราคา </router-link>
-          <router-link to="/Home" class="mr-3">เกี่ยวกับเรา </router-link>
+          <router-link to="/" class="mr-3">ราคา </router-link>
+          <router-link to="/" class="mr-3">เกี่ยวกับเรา </router-link>
           <!-- <b-navbar-nav>
             <b-nav-item href="#">Home</b-nav-item>
             <b-nav-item href="#">Showcase</b-nav-item>
@@ -21,7 +21,7 @@
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
             <!-- {{this.$session.getAll()}} -->
-                <router-link to="/Order"><b-button v-if="this.$session.get('session')== true" class="yr-button mr-2 bt-order">Order</b-button></router-link>
+                <router-link to="/Order"><b-button v-if="this.$session.get('session')== true" class="yr-button mr-2 bgblue">Order</b-button></router-link>
                 <b-button v-if="this.$session.get('session')== true"  v-b-modal.checkSignOut class="yr-button">Sign Out</b-button>
                 <router-link to="/Signin" v-else><b-button class="yr-button">Sign in</b-button></router-link>
                 <div>
@@ -46,7 +46,10 @@
                     backgroundColor= '#ffffff'
                     :is-full-page="true"></loading>
     </div>
-    <router-view/>
+    <div style="position:relative;min-height:640px">
+      <router-view/>
+    </div>
+    <!-- Footer*********************************************** -->
     <div class="footer fontth cwhite" style="bottom:0; position:relative; padding-top:1px">
       <b-container >
         <b-row class="mt-5" >
@@ -57,10 +60,9 @@
             </li>
             </ul>
             <br>
-            <p style="font-size:12px;"><i class="fas fa-copyright" style="font-size:12px; margin-top: 110px"></i>2018 Youry, All rights reserved.</p>
           </b-col>
           <b-col md="4">
-            <p>ติดต่อเรา</p>
+            <h5>ติดต่อเรา</h5>
             <p>เลขที่ 80 ถนนป๊อปปูล่า ต.บ้านใหม่
               อำเภอปากเกร็ด จังหวัดนนทบุรี 11120
               โทรศัพท์ 091-765-9890
@@ -72,9 +74,10 @@
             <a href=""><i class="fab fa-twitter" style="margin:0px 10px"></i></a></p>
             <br>
             <b-form-input v-model="mailContact" type="text" placeholder="E-mail" class="email left"></b-form-input>
-            <b-button class="yr-button">ส่ง</b-button>
+            <b-button class="yr-button mt-3">ส่ง</b-button>
           </b-col>
         </b-row>
+            <p style="font-size:12px;"><i class="fas fa-copyright" style="font-size:12px; margin-top: 20px;"></i>2018 Youry, All rights reserved.</p>
       </b-container>
     </div>
   </div>
